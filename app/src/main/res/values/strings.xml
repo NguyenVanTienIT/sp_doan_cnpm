@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Service _Provider</string>
+    <string-array name="optionl_user">
+        <item>Nhân Viên</item>
+        <item>Chủ Quán</item>
+    </string-array>
 </resources>
