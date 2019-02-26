@@ -14,7 +14,9 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+
+        >
 
             <LinearLayout
                     android:orientation="vertical"
@@ -42,12 +44,15 @@
                     />
                 </LinearLayout>
                 <EditText
+                        android:id="@+id/username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10sp"
                         android:layout_marginLeft="10sp"
                         android:hint="Tài Khoản"/>
                 <EditText
+                        android:id="@+id/password"
+                        android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10sp"
@@ -55,6 +60,7 @@
                         android:hint="Mật Khẩu"/>
 
                 <Button
+                        android:id="@+id/login"
                         android:layout_width="match_parent"
                         android:layout_height="50sp"
                         android:text="Đăng nhập"
@@ -82,6 +88,7 @@
                         android:layout_height="wrap_content"
                         android:text="Bạn chưa có tài khoản?"/>
                 <TextView
+                        android:id="@+id/register"
                         android:textColor="#50C46E"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -116,6 +123,7 @@
                     android:textColor="#006837"
                     android:background="@drawable/backgroud_btn_huongdansudung"
                     android:layout_marginTop="10sp"
+                    android:layout_marginBottom="20sp"
             />
 
         </LinearLayout>

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".RegisterActivity">
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFF"
+    >
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+        >
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="200sp"
+                    android:background="#FAFBFC"
+            >
+
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20sp"
+                    android:layout_marginRight="20sp"
+                    android:background="#FFFFFF"
+            >
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tài khoản đăng nhập"
+                        android:textColor="#006837"
+                />
+                <EditText
+                        android:id="@+id/username"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tài khoản đăng nhập"
+                />
+                <LinearLayout
+                        android:layout_marginTop="5sp"
+                        android:id="@+id/error_username"
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:id="@+id/txt_error_username"
+                            android:textStyle="italic"
+                            android:textColor="#FF4939"
+                            android:text="Tên đăng nhập phải từ 6 đến 10 kí tự"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <View
+                            android:layout_marginTop="5sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1sp"
+                            android:background="#000"
+                    />
+
+                </LinearLayout>
+
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mật khẩu"
+                        android:textColor="#006837"
+                />
+                <EditText
+                        android:id="@+id/password"
+                        android:inputType="textPassword"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Mật khẩu"
+                />
+                <LinearLayout
+                        android:layout_marginTop="5sp"
+                        android:id="@+id/error_password"
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:id="@+id/txt_error_password"
+                            android:textStyle="italic"
+                            android:textColor="#FF4939"
+                            android:text="Mật khẩu phải có ít nhất 6 kí tự"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <View
+                            android:layout_marginTop="5sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1sp"
+                            android:background="#000"
+                    />
+
+                </LinearLayout>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nhập lại mật khẩu"
+                        android:textColor="#006837"
+                />
+                <EditText
+                        android:id="@+id/confirm_password"
+                        android:inputType="textPassword"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nhập lại mật khẩu"
+                />
+                <LinearLayout
+                        android:layout_marginTop="5sp"
+                        android:id="@+id/error_confirm_password"
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:id="@+id/txt_error_confirmcode"
+                            android:textStyle="italic"
+                            android:textColor="#FF4939"
+                            android:text="Mật khẩu và xác nhận không chính xác"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <View
+                            android:layout_marginTop="5sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1sp"
+                            android:background="#000"
+                    />
+
+                </LinearLayout>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên nhà hàng"
+                        android:textColor="#006837"
+                />
+                <EditText
+                        android:id="@+id/name_nhahang"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tên nhà hàng"
+                />
+                <LinearLayout
+                        android:layout_marginTop="5sp"
+                        android:id="@+id/error_ten_nha_hang"
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:textStyle="italic"
+                            android:textColor="#FF4939"
+                            android:text="Trường này không được để trống"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <View
+                            android:layout_marginTop="5sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1sp"
+                            android:background="#000"
+                    />
+
+                </LinearLayout>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:textColor="#006837"
+                />
+                <EditText
+                        android:id="@+id/email"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Email"
+                />
+                <LinearLayout
+                        android:layout_marginTop="5sp"
+                        android:id="@+id/error_email"
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:id="@+id/txt_error_email"
+                            android:textStyle="italic"
+                            android:textColor="#FF4939"
+                            android:text="Địa chỉ email không hợp lệ"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <View
+                            android:layout_marginTop="5sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1sp"
+                            android:background="#000"
+                    />
+
+                </LinearLayout>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Số điện thoại"
+                        android:textColor="#006837"
+                />
+                <EditText
+                        android:id="@+id/phonenumber"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Số điện thoại"
+                />
+                <LinearLayout
+                        android:layout_marginTop="5sp"
+                        android:id="@+id/error_phonenumber"
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:id="@+id/txt_error_phonenumber"
+                            android:textStyle="italic"
+                            android:textColor="#FF4939"
+                            android:text="Số điện thoại không hợp lệ"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <View
+                            android:layout_marginTop="5sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1sp"
+                            android:background="#000"
+                    />
+
+                </LinearLayout>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Địa chỉ nhà hàng"
+                        android:textColor="#006837"
+                />
+                <EditText
+                        android:id="@+id/address"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Địa chỉ nhà hàng"
+                />
+                <LinearLayout
+                        android:layout_marginTop="5sp"
+                        android:id="@+id/error_address"
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:textColor="#FF4939"
+                            android:text="Trường này không được để trống"
+                            android:textStyle="italic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <View
+                            android:layout_marginTop="5sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1sp"
+                            android:background="#000"
+                    />
+
+                </LinearLayout>
+
+
+                <Button
+                        android:id="@+id/save"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lưu"
+                        android:background="#CCCCCC"
+                        android:textColor="#FFF"
+                        android:layout_marginBottom="20sp"
+                />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
