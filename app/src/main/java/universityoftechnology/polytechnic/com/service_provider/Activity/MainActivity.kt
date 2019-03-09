@@ -1,7 +1,6 @@
-package universityoftechnology.polytechnic.com.service_provider
+package universityoftechnology.polytechnic.com.service_provider.Activity
 
 import android.content.Intent
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +13,9 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import dmax.dialog.SpotsDialog
 import org.json.JSONObject
+import universityoftechnology.polytechnic.com.service_provider.R
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -27,6 +29,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     var btnLogin : Button? = null
     var dialog : android.app.AlertDialog? = null
     var Server : String = ""
+    var sharedpreference : SharedPreferences? = null
+
 
 
 
@@ -56,6 +60,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         initView()
         addActionListener()
 
+
+
     }
 
     fun initView(){
@@ -64,6 +70,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         editPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.login)
 
+        sharedpreference = PreferenceManager.getDefaultSharedPreferences(applicationContext);
+        if (sharedpreference!!.getString("token", null) != null) {
+            if (sharedpreference!!.getString("token", null).equals("success")) {
+                var intent: Intent = Intent(applicationContext, HomeActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
     fun addActionListener(){
@@ -112,6 +125,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     if (user != null){ // Login thành công
                         if(dialog != null) dialog!!.dismiss()
                         Toast.makeText(applicationContext, "Đăng nhập tài khoản thành công", Toast.LENGTH_SHORT).show()
+                        var intent : Intent = Intent(applicationContext, HomeActivity::class.java)
+                        sharedpreference!!.edit().putString("token","success").apply();
+                        startActivity(intent)
                     }else{
                         if(dialog != null) dialog!!.dismiss()
                         Toast.makeText(applicationContext, "Đăng nhập tài khoản thất bại", Toast.LENGTH_SHORT).show()
@@ -123,7 +139,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 }
             },
             Response.ErrorListener { e ->
-
+                if(dialog != null) dialog!!.dismiss()
+                Toast.makeText(applicationContext, "Đăng nhập tài khoản thất bại", Toast.LENGTH_SHORT).show()
             }){
             override fun getParams(): Map<String, String> {
                 var params : HashMap<String, String> = HashMap<String, String>()

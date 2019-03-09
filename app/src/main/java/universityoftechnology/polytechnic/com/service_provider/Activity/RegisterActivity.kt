@@ -1,26 +1,22 @@
-package universityoftechnology.polytechnic.com.service_provider
+package universityoftechnology.polytechnic.com.service_provider.Activity
 
-import android.app.DownloadManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.service.voice.VoiceInteractionSession
-import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.textclassifier.TextLinks
 import android.widget.*
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dmax.dialog.SpotsDialog
 import java.util.regex.Pattern
 import org.json.JSONObject
+import universityoftechnology.polytechnic.com.service_provider.R
 import universityoftechnology.polytechnic.com.service_provider.model.User
 
 

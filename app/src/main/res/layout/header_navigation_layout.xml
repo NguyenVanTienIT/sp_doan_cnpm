@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200sp"
+    android:background="@drawable/avatar_view"
+    >
+    <TextView
+            android:id="@+id/ten_quan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Demo GonJoy SP3"
+            android:textColor="#FFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginTop="120sp"
+            android:layout_marginLeft="20sp"
+    />
+    <TextView
+            android:id="@+id/diachi_quan"
+            android:layout_below="@+id/ten_quan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6 Trần Quốc Toản Đà Nẵng"
+            android:textColor="#FFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="20sp"
+    />
+
+
+</RelativeLayout>

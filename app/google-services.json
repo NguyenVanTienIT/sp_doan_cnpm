@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "356117166574",
+    "firebase_url": "https://demousefirebase-40962.firebaseio.com",
+    "project_id": "demousefirebase-40962",
+    "storage_bucket": "demousefirebase-40962.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356117166574:android:bd5e119827529812",
+        "android_client_info": {
+          "package_name": "universityoftechnology.polytechnic.com.service_provider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356117166574-fuvo3pku7bf926f7uerlcg22ir8juqr9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnp4WroS8g8bns18YUQsjtMjdw3uT7hyo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
