@@ -72,10 +72,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         sharedpreference = PreferenceManager.getDefaultSharedPreferences(applicationContext);
         if (sharedpreference!!.getString("token", null) != null) {
-            if (sharedpreference!!.getString("token", null).equals("success")) {
                 var intent: Intent = Intent(applicationContext, HomeActivity::class.java)
                 startActivity(intent)
-            }
         }
     }
 
@@ -126,7 +124,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         if(dialog != null) dialog!!.dismiss()
                         Toast.makeText(applicationContext, "Đăng nhập tài khoản thành công", Toast.LENGTH_SHORT).show()
                         var intent : Intent = Intent(applicationContext, HomeActivity::class.java)
-                        sharedpreference!!.edit().putString("token","success").apply();
+                        sharedpreference!!.edit().putString("token",jobj.getString("accessToken")).apply();
                         startActivity(intent)
                     }else{
                         if(dialog != null) dialog!!.dismiss()

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/home" android:checkable="true" android:title="Home"/>
-    <item android:id="@+id/circle" android:checkable="true" android:title="Circles"/>
-    <item android:id="@+id/notification" android:checkable="true" android:title="Notification"/>
-    <item android:id="@+id/my_request" android:checkable="true" android:title="Request"/>
-    <item android:id="@+id/setting" android:checkable="true" android:title="Setting"/>
-    <item android:id="@+id/log_out" android:checkable="true" android:title="Log out"/>
+    <item android:id="@+id/trangchu" android:checkable="true" android:title="Trang Chủ"/>
+    <item android:id="@+id/thucdon" android:checkable="true" android:title="Thực đơn"/>
+    <item android:id="@+id/doi_mat_khau" android:checkable="true" android:title="Đổi mật khẩu"/>
+    <item android:id="@+id/lienhe" android:checkable="true" android:title="Liên hệ hỗ trợ"/>
+    <item android:id="@+id/dangxuat" android:checkable="true" android:title="Đăng xuất"/>
 </menu>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80sp"
+            android:background="#006837"
+    >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thực đơn"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+        />
+
+        <ImageButton
+                android:id="@+id/menu"
+                android:layout_marginLeft="20sp"
+                android:layout_centerVertical="true"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:src="@drawable/ic_menu"
+                android:background="#006837"
+        />
+    </RelativeLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="80sp"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+    >
+        <RelativeLayout
+                android:id="@+id/doan"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <TextView
+                    android:id="@+id/text_doan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ĐỒ ĂN"
+                    android:textColor="@color/btn_selected"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+            />
+            <View
+                    android:id="@+id/line_doan"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/btn_selected"
+                    android:layout_width="match_parent"
+                    android:layout_height="2sp"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_weight="1"
+                android:id="@+id/douong"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:id="@+id/text_douong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ĐỒ UỐNG"
+                    android:textColor="@color/btn_none_selected"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+            />
+            <View
+                    android:id="@+id/line_douong"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/btn_none_selected"
+                    android:layout_width="match_parent"
+                    android:layout_height="2sp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
