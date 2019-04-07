@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80sp"
+            android:background="#006837"
+    >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Danh sách yêu cầu"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+        />
+
+        <ImageButton
+                android:id="@+id/menu"
+                android:layout_marginLeft="20sp"
+                android:layout_centerVertical="true"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:src="@drawable/ic_menu"
+                android:background="#006837"
+        />
+    </RelativeLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_marginTop="80sp"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+    >
+        <RelativeLayout
+                android:id="@+id/tat_ca"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <TextView
+                    android:id="@+id/text_tatca"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TẤT CẢ"
+                    android:textSize="10sp"
+                    android:textColor="@color/btn_selected"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+            />
+            <View
+                    android:id="@+id/line_tat_ca"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/btn_selected"
+                    android:layout_width="match_parent"
+                    android:layout_height="2sp"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_weight="1"
+                android:id="@+id/hoan_thanh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:id="@+id/text_hoan_thanh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HOÀN THÀNH"
+                    android:textSize="10sp"
+                    android:textColor="@color/btn_none_selected"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+            />
+            <View
+                    android:id="@+id/line_hoan_thanh"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/btn_none_selected"
+                    android:layout_width="match_parent"
+                    android:layout_height="2sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_weight="1"
+                android:id="@+id/chua_hoan_thanh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:id="@+id/text_chua_hoan_thanh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CHƯA HOÀN THÀNH"
+                    android:textSize="10sp"
+                    android:textColor="@color/btn_none_selected"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+            />
+            <View
+                    android:id="@+id/line_chua_hoan_thanh"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/btn_none_selected"
+                    android:layout_width="match_parent"
+                    android:layout_height="2sp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

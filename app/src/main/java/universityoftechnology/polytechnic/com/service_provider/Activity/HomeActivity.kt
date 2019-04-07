@@ -18,7 +18,10 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -26,9 +29,12 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
+import com.google.gson.Gson
 import org.json.JSONObject
 import universityoftechnology.polytechnic.com.service_provider.Fragment.ThucDon_Fragment
 import universityoftechnology.polytechnic.com.service_provider.Fragment.TrangChu_Fragment
+import universityoftechnology.polytechnic.com.service_provider.Fragment.YeuCau_Fragment
+import universityoftechnology.polytechnic.com.service_provider.model.InformationUser
 
 
 class HomeActivity : AppCompatActivity() {
@@ -36,6 +42,10 @@ class HomeActivity : AppCompatActivity() {
     var optionMenu : NavigationView? = null
     var mDrawable : DrawerLayout? = null
     var sharedpreference : SharedPreferences? = null
+    var information : RelativeLayout? = null
+    var txtTenQuan : TextView? = null
+    var txtDiaChiQuan : TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(universityoftechnology.polytechnic.com.service_provider.R.layout.activity_home)
@@ -52,7 +62,7 @@ class HomeActivity : AppCompatActivity() {
             .addOnCompleteListener(OnCompleteListener { task ->
 
                 if (!task.isSuccessful) {
-                    Log.d("Device_Token", "Lỗi rồi")
+                    Log.d("Device_Token", "Lỗi rồi"+ task.toString())
                     return@OnCompleteListener
                 }
                 else {
@@ -64,6 +74,15 @@ class HomeActivity : AppCompatActivity() {
 
                 }
             })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getInformation()
+    }
+
+    override fun onBackPressed() {
+        return
     }
 
     fun sendDeviceToken(deviceToken : String){
@@ -102,6 +121,10 @@ class HomeActivity : AppCompatActivity() {
    fun initView(){
        mDrawable = findViewById(R.id.drawer_menu)
        optionMenu = findViewById(R.id.navigation_menu)
+       var header = optionMenu!!.getHeaderView(0)
+       information = header.findViewById(R.id.information_restaurant)
+       txtTenQuan = header.findViewById(R.id.ten_quan)
+       txtDiaChiQuan = header.findViewById(R.id.diachi_quan)
        optionMenu!!.bringToFront()
        resetMenu()
 
@@ -155,7 +178,23 @@ class HomeActivity : AppCompatActivity() {
                     p0.setTitle(spanString)
                     mDrawable!!.closeDrawer(Gravity.LEFT)
                 }
+                else if (id == R.id.yeucau){
+                    resetMenu()
+                    var spanString : SpannableString = SpannableString(p0.title.toString())
+                    spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
+                    p0.setTitle(spanString)
+                    mDrawable!!.closeDrawer(Gravity.LEFT)
+                    supportFragmentManager.beginTransaction().replace(R.id.layout_main, YeuCau_Fragment()).commit()
+                }
                 return true
+            }
+        })
+
+        information!!.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                mDrawable!!.closeDrawer(Gravity.LEFT)
+                var intent : Intent = Intent(applicationContext, UpdataInformationActivity::class.java)
+                startActivity(intent)
             }
         })
     }
@@ -167,5 +206,14 @@ class HomeActivity : AppCompatActivity() {
             spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.none_selected)), 0, spanString.length, 0)
             p0.setTitle(spanString)
         }
+    }
+
+    fun getInformation(){
+        var gson : Gson = Gson()
+        var json = sharedpreference!!.getString("Information_User", null)
+        var informationUser : InformationUser = gson.fromJson(json, InformationUser::class.java)
+        Log.d("INFORMATION", informationUser.username)
+        txtTenQuan!!.text = informationUser.name
+        txtDiaChiQuan!!.text = informationUser.address
     }
 }

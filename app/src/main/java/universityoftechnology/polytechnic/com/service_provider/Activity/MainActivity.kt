@@ -125,6 +125,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         Toast.makeText(applicationContext, "Đăng nhập tài khoản thành công", Toast.LENGTH_SHORT).show()
                         var intent : Intent = Intent(applicationContext, HomeActivity::class.java)
                         sharedpreference!!.edit().putString("token",jobj.getString("accessToken")).apply();
+                        sharedpreference!!.edit().putString("Information_User", jobj.toString()).apply()
                         startActivity(intent)
                     }else{
                         if(dialog != null) dialog!!.dismiss()
