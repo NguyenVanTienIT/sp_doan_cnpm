@@ -211,9 +211,15 @@ class HomeActivity : AppCompatActivity() {
     fun getInformation(){
         var gson : Gson = Gson()
         var json = sharedpreference!!.getString("Information_User", null)
-        var informationUser : InformationUser = gson.fromJson(json, InformationUser::class.java)
-        Log.d("INFORMATION", informationUser.username)
-        txtTenQuan!!.text = informationUser.name
-        txtDiaChiQuan!!.text = informationUser.address
+        Log.d("JSON_INFORMATION", json)
+        if (json != null) {
+            var informationUser: InformationUser = gson.fromJson(json, InformationUser::class.java)
+            Log.d("INFORMATION", informationUser.username)
+            txtTenQuan!!.text = informationUser.name
+            txtDiaChiQuan!!.text = informationUser.address
+        }
+        else{
+
+        }
     }
 }

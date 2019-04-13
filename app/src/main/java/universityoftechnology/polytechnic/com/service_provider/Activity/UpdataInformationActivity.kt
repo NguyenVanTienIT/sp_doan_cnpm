@@ -1,11 +1,23 @@
 package universityoftechnology.polytechnic.com.service_provider.Activity
 
+import android.Manifest
+import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -20,10 +32,13 @@ import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONObject
 import universityoftechnology.polytechnic.com.service_provider.R
 import universityoftechnology.polytechnic.com.service_provider.model.InformationUser
+import java.io.ByteArrayOutputStream
+import java.net.URL
 import java.util.regex.Pattern
 
 class UpdataInformationActivity : AppCompatActivity() {
     var imageAvatar : ImageView? = null
+    var btnUpload : ImageView? = null
     var username : EditText? = null
     var tenNhaHang : EditText? = null
     var email : EditText? = null
@@ -33,6 +48,8 @@ class UpdataInformationActivity : AppCompatActivity() {
     var btnBack : ImageButton? = null
 
     var Server : String = ""
+    val MY_PERMISSIONS_CAMERA = 10
+    val PICK_IMAGE_REQUEST = 20
 
     var linearErrorTenNhaHang : LinearLayout? = null
     var txtErrorEmail : TextView? = null
@@ -42,6 +59,8 @@ class UpdataInformationActivity : AppCompatActivity() {
     var linearErrorAddress : LinearLayout? = null
 
     var sharedpreference : SharedPreferences? = null
+
+    var bitmap : Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +76,29 @@ class UpdataInformationActivity : AppCompatActivity() {
         return
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK){
+            if(requestCode == 1){
+                var bundel : Bundle = data!!.extras
+                var btm : Bitmap = bundel.get("data") as Bitmap
+                bitmap = btm
+                imageAvatar!!.setImageBitmap(btm)
+                uploadImageToServer()
+                //settingImage()
+            }
+            else if (requestCode == 2){
+
+                var selection : Uri = data!!.data
+                imageAvatar!!.setImageURI(selection)
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selection)
+                uploadImageToServer()
+                //settingImage()
+
+            }
+        }
+    }
+
     fun initView(){
         imageAvatar = findViewById(R.id.avatar)
         username = findViewById(R.id.username)
@@ -66,6 +108,7 @@ class UpdataInformationActivity : AppCompatActivity() {
         address = findViewById(R.id.address)
         btnSave = findViewById(R.id.save)
         btnBack = findViewById(R.id.back)
+        btnUpload = findViewById(R.id.upload)
 
         linearErrorTenNhaHang = findViewById(R.id.error_ten_nha_hang)
         linearErrorEmail = findViewById(R.id.error_email)
@@ -88,6 +131,39 @@ class UpdataInformationActivity : AppCompatActivity() {
     }
 
     fun initAction(){
+        btnUpload!!.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                if (ContextCompat.checkSelfPermission(this@UpdataInformationActivity, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this@UpdataInformationActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED)
+                {
+                    ActivityCompat.requestPermissions(this@UpdataInformationActivity,
+                        arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        MY_PERMISSIONS_CAMERA)
+                }
+                else {
+                    chooseImage()
+                }
+            }
+        })
+
+        imageAvatar!!.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                if (ContextCompat.checkSelfPermission(this@UpdataInformationActivity, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this@UpdataInformationActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED)
+                {
+                    ActivityCompat.requestPermissions(this@UpdataInformationActivity,
+                        arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        MY_PERMISSIONS_CAMERA)
+                }
+                else {
+                    chooseImage()
+                }
+            }
+        })
+
+
         btnSave!!.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
                 if (tenNhaHang!!.text != null && address!!.text != null && email!!.text != null && numberPhone!!.text != null){
@@ -219,6 +295,102 @@ class UpdataInformationActivity : AppCompatActivity() {
         }
         requestQueue.add(stringRequest)
     }
+
+    fun chooseImage() {
+        val options = arrayOf<CharSequence>("Take Photo", "Choose from Gallery", "Cancel")
+        val builder = AlertDialog.Builder(this@UpdataInformationActivity)
+        builder.setTitle("Add Photo!")
+        builder.setItems(options) { dialog, item ->
+            if (options[item] == "Take Photo") {
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(intent, 1)
+            }
+            else if (options[item] == "Choose from Gallery") {
+                val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                intent.setType("image/*")
+                startActivityForResult(intent, 2)
+            }
+            else if (options[item] == "Cancel") {
+                dialog.dismiss()
+            }
+        }
+        builder.show()
+    }
+
+    fun uploadImageToServer(){
+        var progressDialog =  ProgressDialog(this@UpdataInformationActivity);
+        progressDialog.setMessage("Uploading, please wait...")
+        progressDialog.setCancelable(false)
+        progressDialog.show();
+
+        //converting image to base64 string
+
+
+        //sending image to server
+        var url: String = Server + "/provider/image/upload"
+        var requestQueue: RequestQueue = Volley.newRequestQueue(this)
+        var stringRequest : StringRequest = object : StringRequest(
+            Request.Method.POST, url,
+            Response.Listener { s ->
+                try {
+                    var jobj = JSONObject(s)
+                    Log.d("Ket qua", jobj.toString())
+                    var success: String = jobj.getString("success")
+                    if (success.equals("true")){ // update thành công
+                        //if(dialog != null) dialog!!.dismiss()
+                        updateInlocal()
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, "Cập nhật ảnh thành công", Toast.LENGTH_SHORT).show()
+                    }else{
+                        //if(dialog != null) dialog!!.dismiss()
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, "Cập nhật ảnh thất bại", Toast.LENGTH_SHORT).show()
+                    }
+                }catch (e : Exception){
+                    Log.d("Error", e.toString())
+                }
+            },
+            Response.ErrorListener { e ->
+
+            }){
+
+            override fun getBody(): ByteArray {
+                return parseImageToJson()
+            }
+
+            override fun getParams(): MutableMap<String, String> {
+                var param : HashMap<String, String> = HashMap()
+                param.put("type", "bg")
+                return params
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                var headers : HashMap<String, String> = HashMap<String, String>()
+                headers.put("Authorization", sharedpreference!!.getString("token", ""))
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
+
+    }
+
+    fun parseImageToJson() : ByteArray{
+        var baos : ByteArrayOutputStream =  ByteArrayOutputStream()
+        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        var imageBytes = baos!!.toByteArray()
+       // var imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT)
+        return imageBytes
+    }
+
+     fun getStringImage(bmp : Bitmap) : String
+     {
+         var baos : ByteArrayOutputStream =  ByteArrayOutputStream()
+         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+         var imageBytes = baos.toByteArray();
+         var encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+         return encodedImage;
+
+     }
 
     fun updateInlocal(){
         var gson : Gson = Gson()

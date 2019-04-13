@@ -71,6 +71,7 @@
                             android:layout_height="match_parent"/>
 
                     <ImageView
+                            android:id="@+id/upload"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_cloud_upload"
