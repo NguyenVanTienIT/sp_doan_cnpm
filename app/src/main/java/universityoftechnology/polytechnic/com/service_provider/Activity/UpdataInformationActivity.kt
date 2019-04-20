@@ -24,16 +24,33 @@ import android.widget.*
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.ImageRequest
+//import com.android.volley.request.SimpleMultiPartRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.koushikdutta.async.future.FutureCallback
+import com.koushikdutta.async.future.FutureRunnable
+import com.koushikdutta.ion.Ion
 import kotlinx.android.synthetic.main.activity_register.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import org.json.JSONException
 import org.json.JSONObject
+import retrofit2.Call
 import universityoftechnology.polytechnic.com.service_provider.R
+import universityoftechnology.polytechnic.com.service_provider.UploadImage.UploadFile
 import universityoftechnology.polytechnic.com.service_provider.model.InformationUser
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.ObjectOutputStream
 import java.net.URL
+import java.util.concurrent.Future
 import java.util.regex.Pattern
 
 class UpdataInformationActivity : AppCompatActivity() {
@@ -61,12 +78,15 @@ class UpdataInformationActivity : AppCompatActivity() {
     var sharedpreference : SharedPreferences? = null
 
     var bitmap : Bitmap? = null
+    var pathFile : String? = null
+    var jsonObject : JsonObject? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_updata_information)
         sharedpreference = PreferenceManager.getDefaultSharedPreferences(this)
         Server = resources.getString(R.string.service)
+        jsonObject = JsonObject()
         initView()
         initData()
         initAction()
@@ -85,6 +105,7 @@ class UpdataInformationActivity : AppCompatActivity() {
                 bitmap = btm
                 imageAvatar!!.setImageBitmap(btm)
                 uploadImageToServer()
+                //upload()
                 //settingImage()
             }
             else if (requestCode == 2){
@@ -92,7 +113,10 @@ class UpdataInformationActivity : AppCompatActivity() {
                 var selection : Uri = data!!.data
                 imageAvatar!!.setImageURI(selection)
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selection)
+                pathFile = UploadFile.getPathFromURI(selection, applicationContext)
+                Log.d("Ketqua", pathFile)
                 uploadImageToServer()
+                //upload()
                 //settingImage()
 
             }
@@ -321,10 +345,7 @@ class UpdataInformationActivity : AppCompatActivity() {
         var progressDialog =  ProgressDialog(this@UpdataInformationActivity);
         progressDialog.setMessage("Uploading, please wait...")
         progressDialog.setCancelable(false)
-        progressDialog.show();
-
-        //converting image to base64 string
-
+        progressDialog.show()
 
         //sending image to server
         var url: String = Server + "/provider/image/upload"
@@ -334,11 +355,12 @@ class UpdataInformationActivity : AppCompatActivity() {
             Response.Listener { s ->
                 try {
                     var jobj = JSONObject(s)
-                    Log.d("Ket qua", jobj.toString())
+                    Log.d("Ketqua", jobj.toString())
                     var success: String = jobj.getString("success")
                     if (success.equals("true")){ // update thành công
                         //if(dialog != null) dialog!!.dismiss()
                         updateInlocal()
+                        Log.d("Ketqua", jobj.getString("data"))
                         progressDialog.dismiss()
                         Toast.makeText(applicationContext, "Cập nhật ảnh thành công", Toast.LENGTH_SHORT).show()
                     }else{
@@ -354,8 +376,25 @@ class UpdataInformationActivity : AppCompatActivity() {
 
             }){
 
+            override fun getBodyContentType(): String {
+                return "form-data"
+            }
             override fun getBody(): ByteArray {
-                return parseImageToJson()
+                var bos : ByteArrayOutputStream = ByteArrayOutputStream()
+                var json : String = "{" +
+                        "\"file\":"+"\""+getStringImage(bitmap!!)+"\""+
+                        "}"
+               // return parseImageToJson()
+
+               /* var body : HashMap<String, File> = HashMap()
+                body.put("file", File(pathFile))
+
+                var byteOut : ByteArrayOutputStream = ByteArrayOutputStream()
+                var out : ObjectOutputStream = ObjectOutputStream(byteOut);
+                out.writeObject(body)
+                return byteOut.toByteArray()*/
+              //return UploadFile.readContentIntoByteArray(File(pathFile))
+                return UploadFile.convertFileToByteArray(File(pathFile))
             }
 
             override fun getParams(): MutableMap<String, String> {
@@ -366,11 +405,24 @@ class UpdataInformationActivity : AppCompatActivity() {
 
             override fun getHeaders(): MutableMap<String, String> {
                 var headers : HashMap<String, String> = HashMap<String, String>()
-                headers.put("Authorization", sharedpreference!!.getString("token", ""))
+                //headers.put("Authorization", sharedpreference!!.getString("token", ""))
+                headers.put("Content-Type", "application/x-www-form-urlencoded")
                 return headers
             }
         }
         requestQueue.add(stringRequest)
+
+    }
+
+    fun upload(){
+        var url: String = Server + "/provider/image/upload?type=menu"
+        var file : File = File(pathFile)
+        Log.d("Ketqua", file.length().toString())
+        var upload : UploadFile = UploadFile()
+        upload.UploadImageToServer(file, applicationContext, url)
+    }
+
+    fun uploadImageUsingVolley(){
 
     }
 
@@ -382,8 +434,7 @@ class UpdataInformationActivity : AppCompatActivity() {
         return imageBytes
     }
 
-     fun getStringImage(bmp : Bitmap) : String
-     {
+     fun getStringImage(bmp : Bitmap) : String {
          var baos : ByteArrayOutputStream =  ByteArrayOutputStream()
          bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
          var imageBytes = baos.toByteArray();
@@ -447,4 +498,5 @@ class UpdataInformationActivity : AppCompatActivity() {
                 ")+")
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
+
 }

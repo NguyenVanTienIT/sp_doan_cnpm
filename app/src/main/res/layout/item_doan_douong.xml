@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#EFEFEF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+            android:background="#FFF"
+            android:orientation="horizontal"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
+            android:layout_width="match_parent"
+            android:layout_height="150sp">
+
+        <ImageView
+                android:id="@+id/iamge_do_an_do_uong"
+                android:src="@drawable/demo"
+                android:layout_marginLeft="25sp"
+                android:layout_marginRight="20sp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="100sp"
+                android:layout_height="100sp"/>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:id="@+id/ten_do_an_do_uong"
+                    android:layout_marginTop="20sp"
+                    android:text="Trà sữa HongKong"
+                    android:textColor="#000"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:id="@+id/gia_san_pham"
+                    android:layout_marginTop="10sp"
+                    android:text="49.000 đ  "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

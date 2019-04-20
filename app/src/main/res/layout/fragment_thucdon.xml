@@ -30,6 +30,7 @@
         />
     </RelativeLayout>
     <LinearLayout
+            android:id="@+id/list_btn"
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_marginTop="80sp"
@@ -83,5 +84,20 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    <RelativeLayout
+            android:layout_below="@+id/list_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_doan_douong"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
 
 </RelativeLayout>

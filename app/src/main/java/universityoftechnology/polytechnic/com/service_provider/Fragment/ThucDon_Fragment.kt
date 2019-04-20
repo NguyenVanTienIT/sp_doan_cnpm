@@ -2,6 +2,7 @@ package universityoftechnology.polytechnic.com.service_provider.Fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -25,6 +26,8 @@ class ThucDon_Fragment : Fragment() {
     var lineDoan : View? = null
     var lineDouong : View? = null
 
+    var recyclerView : RecyclerView? = null
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,6 +44,7 @@ class ThucDon_Fragment : Fragment() {
         txtDoUong = view.findViewById(R.id.text_douong)
         lineDoan =view.findViewById(R.id.line_doan)
         lineDouong = view.findViewById(R.id.line_douong)
+        recyclerView = view.findViewById(R.id.list_doan_douong)
 
         addAction()
 

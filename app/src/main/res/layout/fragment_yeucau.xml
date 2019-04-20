@@ -34,6 +34,7 @@
     <LinearLayout
             android:orientation="horizontal"
             android:weightSum="3"
+            android:id="@+id/list_btn"
             android:layout_marginTop="80sp"
             android:layout_width="match_parent"
             android:layout_height="50sp"
@@ -110,6 +111,81 @@
                     android:layout_height="2sp"/>
 
         </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+            android:layout_below="@+id/list_btn"
+            android:layout_marginBottom="62sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_yeu_cau"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+    <View
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="61sp"
+            android:background="#000"
+            android:layout_width="match_parent"
+            android:layout_height="1sp"/>
+
+    <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60sp">
+        <LinearLayout
+                android:id="@+id/giao_hang"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <ImageView
+                    android:id="@+id/icon_giao_hang"
+                    android:layout_marginTop="5sp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_ship_selected"
+                    android:layout_width="35sp"
+                    android:layout_height="35sp"/>
+
+            <TextView
+                    android:id="@+id/txt_giao_hang"
+                    android:text="Giao hàng"
+                    android:textColor="#006837"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/dat_ban"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+            <ImageView
+                    android:id="@+id/icon_dat_ban"
+                    android:layout_marginTop="5sp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_service"
+                    android:layout_width="35sp"
+                    android:layout_height="35sp"/>
+
+            <TextView
+                    android:id="@+id/txt_dat_ban"
+                    android:text="Đặt bàn"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
