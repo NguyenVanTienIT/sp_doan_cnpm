@@ -208,6 +208,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+
     fun getInformation(){
         var gson : Gson = Gson()
         var json = sharedpreference!!.getString("Information_User", null)
