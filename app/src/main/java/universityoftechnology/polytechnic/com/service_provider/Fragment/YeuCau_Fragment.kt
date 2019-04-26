@@ -64,10 +64,15 @@ class YeuCau_Fragment : Fragment(){
     var bookAdapter : BookAdapter? = null
 
     var shipTab : Boolean = true
+    var statusTab : String = "all"
 
     var sharedpreference : SharedPreferences? = null
 
     var Server : String? = null
+
+    companion object {
+        var acceptAndDecline : Boolean = false
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -81,12 +86,22 @@ class YeuCau_Fragment : Fragment(){
         listRequestBook = ArrayList()
         listRequestShip = ArrayList()
         shipAdapter = ShipAdapter(context!!, listRequestShip!!)
-        //bookAdapter = BookAdapter(context!!, listRequestBook!!)
+        bookAdapter = BookAdapter(context!!, listRequestBook!!)
+
         sharedpreference = PreferenceManager.getDefaultSharedPreferences(activity)
         Server = resources.getString(R.string.service)
         initView(view)
         initAction()
         initDataSource()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (acceptAndDecline){
+            getRequestShip(0, statusTab)
+            getRequestBook(0, statusTab)
+            acceptAndDecline = false
+        }
     }
 
     fun initView(view : View){
@@ -141,10 +156,11 @@ class YeuCau_Fragment : Fragment(){
                 txtChuaHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
                 lineChuaHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
 
+                statusTab = "all"
                 if (shipTab) {
                     getRequestShip(0, "all")
                 }else{
-
+                    getRequestBook(0, "all")
                 }
 
             }
@@ -161,10 +177,11 @@ class YeuCau_Fragment : Fragment(){
                 txtChuaHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
                 lineChuaHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
 
+                statusTab = "complete"
                 if (shipTab) {
                     getRequestShip(0, "complete")
                 }else{
-
+                    getRequestBook(0, "complete")
                 }
             }
         })
@@ -180,10 +197,11 @@ class YeuCau_Fragment : Fragment(){
                 txtHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
                 lineHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
 
+                statusTab = "uncomplete"
                 if (shipTab) {
                     getRequestShip(0, "uncomplete")
                 }else{
-
+                    getRequestBook(0, "uncomplete")
                 }
             }
         })
@@ -203,6 +221,10 @@ class YeuCau_Fragment : Fragment(){
                 txtShip!!.setTextColor(Color.parseColor("#747474"))
 
                 resetDefaultView()
+                statusTab = "all"
+                getRequestBook(0, "all")
+                recyclerBook!!.visibility = View.VISIBLE
+                recyclerShip!!.visibility = View.GONE
                 shipTab = false
 
             }
@@ -216,7 +238,10 @@ class YeuCau_Fragment : Fragment(){
                 txtDatban!!.setTextColor(Color.parseColor("#747474"))
 
                 resetDefaultView()
+                statusTab = "all"
                 getRequestShip(0, "all")
+                recyclerBook!!.visibility = View.GONE
+                recyclerShip!!.visibility = View.VISIBLE
                 shipTab = true
             }
         })
@@ -310,11 +335,42 @@ class YeuCau_Fragment : Fragment(){
     }
 
     fun initDataBook(data: JSONArray?, status: String){
+        deleteAllBook()
         for (i in 0..data!!.length()-1!!){
             var jsonBook : JSONObject = JSONObject(data[i].toString())
             var book : Book = Book()
 
+            book._id = jsonBook.getString("_id")
+            book.conditions = jsonBook.getString("conditions")
+            book.dateTime = jsonBook.getString("dateTime")
+            book.numberOfCustomer = jsonBook.getString("numberOfCustomer")
+            book.botName = jsonBook.getString("botName")
+            book.__v = jsonBook.getInt("__v")
+            book.status = jsonBook.getInt("status")
+            book.updatedAt = jsonBook.getString("updatedAt")
+            book.createdAt = jsonBook.getString("createdAt")
+            book.isDeleted = jsonBook.getBoolean("isDeleted")
+            book.isActive = jsonBook.getBoolean("isActive")
+            book.isNotified = jsonBook.getBoolean("isNotified")
+
+            var jsonProvider : JSONObject = JSONObject(jsonBook.getString("provider"))
+            book.provider.put("_id", jsonProvider.getString("_id"))
+
+            var jsonCustomer : JSONObject = JSONObject(jsonBook.getString("customer"))
+            book.customer.put("_id", jsonCustomer.getString("_id"))
+            book.customer.put("name", jsonCustomer.getString("name"))
+
+            book.jsonBook = data[i].toString()
+
+            if (status.equals("complete")){
+                if (book.status == 2) listRequestBook!!.add(book)
+            }else if (status.equals("uncomplete")){
+                if (book.status != 2) listRequestBook!!.add(book)
+            }else{
+                listRequestBook!!.add(book)
+            }
         }
+        bookAdapter!!.notifyDataSetChanged()
     }
 
     fun initDataShip(data : JSONArray?, status : String){

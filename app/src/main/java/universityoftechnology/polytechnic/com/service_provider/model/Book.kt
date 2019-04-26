@@ -16,4 +16,6 @@ class Book {
     var isActive : Boolean? = null
     var isNotified : Boolean? = null
 
+    var jsonBook : String? = null
+
 }

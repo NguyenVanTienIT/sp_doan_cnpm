@@ -1,13 +1,16 @@
 package universityoftechnology.polytechnic.com.service_provider.Activity.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
+import universityoftechnology.polytechnic.com.service_provider.Activity.InfomationBookActivity
 import universityoftechnology.polytechnic.com.service_provider.R
 import universityoftechnology.polytechnic.com.service_provider.model.Book
 import universityoftechnology.polytechnic.com.service_provider.model.Ship
@@ -31,7 +34,19 @@ class BookAdapter (con : Context, list : ArrayList<Book>) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(p0: BookViewHoder, p1: Int) {
-
+        var book : Book = listBook!!.get(p1)
+        p0.bind(book)
+        p0.itemMain!!.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                var intent : Intent = Intent(context, InfomationBookActivity::class.java)
+                intent.putExtra("name", book.customer.get("name"))
+                intent.putExtra("number", book.numberOfCustomer)
+                intent.putExtra("time", book.dateTime)
+                intent.putExtra("status", book.status)
+                intent.putExtra("jsonBook", book.jsonBook)
+                context!!.startActivity(intent)
+            }
+        })
     }
 
 
@@ -41,6 +56,7 @@ class BookAdapter (con : Context, list : ArrayList<Book>) : RecyclerView.Adapter
 
         var labelComplete : LinearLayout? = null
         var labelNoneComplete : LinearLayout? = null
+        var itemMain : RelativeLayout? = null
         var btnLoadView : Button? = null
 
         init {
@@ -49,6 +65,7 @@ class BookAdapter (con : Context, list : ArrayList<Book>) : RecyclerView.Adapter
 
             labelComplete = itemView.findViewById(R.id.complete)
             labelNoneComplete = itemView.findViewById(R.id.none_complete)
+            itemMain = itemView.findViewById(R.id.request_item)
             btnLoadView = itemView.findViewById(R.id.load_view)
         }
 
