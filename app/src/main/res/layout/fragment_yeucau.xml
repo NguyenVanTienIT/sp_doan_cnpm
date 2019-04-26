@@ -126,6 +126,14 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <android.support.v7.widget.RecyclerView
+                android:visibility="gone"
+                android:id="@+id/list_yeu_cau_book"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
     </RelativeLayout>
     <View
             android:layout_alignParentBottom="true"

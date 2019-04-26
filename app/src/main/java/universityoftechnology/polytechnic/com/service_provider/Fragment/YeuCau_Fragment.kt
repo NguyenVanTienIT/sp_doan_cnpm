@@ -1,16 +1,37 @@
 package universityoftechnology.polytechnic.com.service_provider.Fragment
 
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import org.json.JSONArray
+import org.json.JSONObject
+import org.json.JSONStringer
 import universityoftechnology.polytechnic.com.service_provider.Activity.HomeActivity
+import universityoftechnology.polytechnic.com.service_provider.Activity.adapter.BookAdapter
+import universityoftechnology.polytechnic.com.service_provider.Activity.adapter.ShipAdapter
 import universityoftechnology.polytechnic.com.service_provider.R
+import universityoftechnology.polytechnic.com.service_provider.model.Book
+import universityoftechnology.polytechnic.com.service_provider.model.CustomerShip
+import universityoftechnology.polytechnic.com.service_provider.model.SavedAddress
+import universityoftechnology.polytechnic.com.service_provider.model.Ship
 
 class YeuCau_Fragment : Fragment(){
 
@@ -33,7 +54,20 @@ class YeuCau_Fragment : Fragment(){
     var txtShip : TextView? = null
     var txtDatban : TextView? = null
 
-    var recyclerView : RecyclerView? = null
+    var listRequestShip : ArrayList<Ship>? = null
+    var listRequestBook : ArrayList<Book>? = null
+
+    var recyclerShip: RecyclerView? = null
+    var recyclerBook : RecyclerView? = null
+
+    var shipAdapter : ShipAdapter? = null
+    var bookAdapter : BookAdapter? = null
+
+    var shipTab : Boolean = true
+
+    var sharedpreference : SharedPreferences? = null
+
+    var Server : String? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,6 +78,18 @@ class YeuCau_Fragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        listRequestBook = ArrayList()
+        listRequestShip = ArrayList()
+        shipAdapter = ShipAdapter(context!!, listRequestShip!!)
+        //bookAdapter = BookAdapter(context!!, listRequestBook!!)
+        sharedpreference = PreferenceManager.getDefaultSharedPreferences(activity)
+        Server = resources.getString(R.string.service)
+        initView(view)
+        initAction()
+        initDataSource()
+    }
+
+    fun initView(view : View){
         btn_tat_ca = view.findViewById(R.id.tat_ca)
         btn_hoan_thanh = view.findViewById(R.id.hoan_thanh)
         btn_chua_hoan_thanh = view.findViewById(R.id.chua_hoan_thanh)
@@ -65,10 +111,22 @@ class YeuCau_Fragment : Fragment(){
         txtShip = view.findViewById(R.id.txt_giao_hang)
         txtDatban = view.findViewById(R.id.txt_dat_ban)
 
-        recyclerView = view.findViewById(R.id.list_yeu_cau)
+        recyclerShip = view.findViewById(R.id.list_yeu_cau)
+        recyclerBook = view.findViewById(R.id.list_yeu_cau_book)
 
+        recyclerShip!!.layoutManager = LinearLayoutManager(activity) as RecyclerView.LayoutManager?
+        val itemDecoration = DividerItemDecoration(activity, LinearLayoutManager(activity).orientation)
+        recyclerShip!!.setHasFixedSize(true)
+        recyclerShip!!.setLayoutManager(LinearLayoutManager(activity))
+        recyclerShip!!.addItemDecoration(itemDecoration)
+        recyclerShip!!.adapter = shipAdapter
 
-        initAction()
+        recyclerBook!!.layoutManager = LinearLayoutManager(activity) as RecyclerView.LayoutManager?
+        val itemDecoration2 = DividerItemDecoration(activity, LinearLayoutManager(activity).orientation)
+        recyclerBook!!.setHasFixedSize(true)
+        recyclerBook!!.setLayoutManager(LinearLayoutManager(activity))
+        recyclerBook!!.addItemDecoration(itemDecoration)
+        recyclerBook!!.adapter = bookAdapter
     }
 
     fun initAction(){
@@ -82,6 +140,13 @@ class YeuCau_Fragment : Fragment(){
 
                 txtChuaHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
                 lineChuaHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
+
+                if (shipTab) {
+                    getRequestShip(0, "all")
+                }else{
+
+                }
+
             }
         })
 
@@ -95,6 +160,12 @@ class YeuCau_Fragment : Fragment(){
 
                 txtChuaHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
                 lineChuaHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
+
+                if (shipTab) {
+                    getRequestShip(0, "complete")
+                }else{
+
+                }
             }
         })
 
@@ -108,6 +179,12 @@ class YeuCau_Fragment : Fragment(){
 
                 txtHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
                 lineHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
+
+                if (shipTab) {
+                    getRequestShip(0, "uncomplete")
+                }else{
+
+                }
             }
         })
 
@@ -125,6 +202,9 @@ class YeuCau_Fragment : Fragment(){
                 txtDatban!!.setTextColor(Color.parseColor("#006837"))
                 txtShip!!.setTextColor(Color.parseColor("#747474"))
 
+                resetDefaultView()
+                shipTab = false
+
             }
         })
 
@@ -134,9 +214,167 @@ class YeuCau_Fragment : Fragment(){
                 iconShip!!.setImageDrawable(resources.getDrawable(R.drawable.ic_ship_selected))
                 txtShip!!.setTextColor(Color.parseColor("#006837"))
                 txtDatban!!.setTextColor(Color.parseColor("#747474"))
+
+                resetDefaultView()
+                getRequestShip(0, "all")
+                shipTab = true
             }
         })
     }
 
+    fun resetDefaultView(){
+        txtTatCa!!.setTextColor(resources.getColor(R.color.btn_selected))
+        lineTatCa!!.setBackgroundColor(resources.getColor(R.color.btn_selected))
+
+        txtHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
+        lineHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
+
+        txtChuaHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
+        lineChuaHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
+    }
+
+    fun initDataSource(){
+        getRequestShip(0, "all")
+    }
+
+    fun getRequestShip(currentPage : Int, status : String){
+        var token = sharedpreference!!.getString("token", null)
+        var url: String = Server + "/provider/ships/getShips"
+        var requestQueue: RequestQueue = Volley.newRequestQueue(activity)
+        var stringRequest : StringRequest = object : StringRequest(
+            Request.Method.POST, url,
+            Response.Listener { s ->
+
+                    var jobj = JSONObject(s)
+                    var data: JSONArray? = jobj.getJSONArray("data")
+                   // Log.d("Request_Ship", data!![0].toString())
+                    if (data != null)
+                    initDataShip(data!!, status)
+
+            },
+            Response.ErrorListener { e ->
+                Log.d("Request_Ship", e.toString())
+            }){
+            override fun getBody(): ByteArray {
+                var body : String = "{\"currentPage\": \""+currentPage+"\",\n" +
+                        "     \"itemPerPage\":\"20\",\n" +
+                        "     \"searchText\":\"Active\"}"
+                return body.toByteArray()
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                var headers : HashMap<String, String> = HashMap<String, String>()
+
+                headers.put("Content-Type", "application/json")
+                headers.put("Authorization", token)
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
+    }
+
+    fun getRequestBook(currentPage: Int, status: String){
+        var token = sharedpreference!!.getString("token", null)
+        var url: String = Server + "/provider/books/getBooks"
+        var requestQueue: RequestQueue = Volley.newRequestQueue(activity)
+        var stringRequest : StringRequest = object : StringRequest(
+            Request.Method.POST, url,
+            Response.Listener { s ->
+
+                var jobj = JSONObject(s)
+                var data: JSONArray? = jobj.getJSONArray("data")
+                // Log.d("Request_Ship", data!![0].toString())
+                if (data != null)
+                    initDataBook(data!!, status)
+
+            },
+            Response.ErrorListener { e ->
+                Log.d("Request_Book", e.toString())
+            }){
+            override fun getBody(): ByteArray {
+                var body : String = "{\"currentPage\": \""+currentPage+"\",\n" +
+                        "     \"itemPerPage\":\"20\",\n" +
+                        "     \"searchText\":\"Active\"}"
+                return body.toByteArray()
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                var headers : HashMap<String, String> = HashMap<String, String>()
+
+                headers.put("Content-Type", "application/json")
+                headers.put("Authorization", token)
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
+    }
+
+    fun initDataBook(data: JSONArray?, status: String){
+        for (i in 0..data!!.length()-1!!){
+            var jsonBook : JSONObject = JSONObject(data[i].toString())
+            var book : Book = Book()
+
+        }
+    }
+
+    fun initDataShip(data : JSONArray?, status : String){
+        deleteAllShip()
+
+        for (i in 0..data!!.length()-1){
+            var jsonShip : JSONObject = JSONObject(data[i].toString())
+
+            var ship : Ship = Ship()
+            ship._id = jsonShip.getString("_id")
+            ship.oderNumber = jsonShip.getString("orderNumber")
+            ship.createAt = jsonShip.getString("createdAt")
+            ship.__v  = jsonShip.getInt("__v")
+            ship.address = jsonShip.getString("address")
+            ship.notes = jsonShip.getString("notes")
+            ship.telephone = jsonShip.getString("telephone")
+            ship.status = jsonShip.getInt("status")
+            ship.isDeleted = jsonShip.getBoolean("isDeleted")
+            ship.isNotified = jsonShip.getBoolean("isNotified")
+            ship.priceTotal = jsonShip.getInt("priceTotal")
+
+            var jsonProvider : JSONObject = JSONObject(jsonShip.getString("provider"))
+            ship.provider = HashMap()
+            ship.provider!!.put("_id", jsonProvider.getString("_id"))
+
+            var jsonCustomer : JSONObject = JSONObject(jsonShip.getString("customer"))
+            var customer : CustomerShip = CustomerShip()
+            customer._id = jsonCustomer.getString("_id")
+            customer.name = jsonCustomer.getString("name")
+            var savedAddress : SavedAddress = SavedAddress()
+            savedAddress.parseObject(JSONObject(jsonCustomer.getString("savedAddress")))
+            customer.savedAddress = savedAddress
+            ship.customer = customer
+
+            ship.jsonShip = data[i].toString()
+
+            ship.listDish = jsonShip.getJSONArray("listDish")
+            if (status.equals("complete")){
+                if (ship.status == 2) listRequestShip!!.add(ship)
+            }else if (status.equals("uncomplete")){
+                if (ship.status != 2) listRequestShip!!.add(ship)
+            }else{
+                listRequestShip!!.add(ship)
+            }
+
+            Log.d("Request_Ship",ship._id+"===="+ship.customer!!.name+"==="+ship.customer!!._id)
+        }
+        shipAdapter!!.notifyDataSetChanged()
+    }
+
+    fun deleteAllShip(){
+        while (listRequestShip != null && listRequestShip!!.size > 0){
+            listRequestShip!!.removeAt(0)
+        }
+    }
+
+    fun deleteAllBook(){
+        while (listRequestBook != null && listRequestBook!!.size > 0){
+            listRequestBook!!.removeAt(0)
+        }
+    }
 
 }

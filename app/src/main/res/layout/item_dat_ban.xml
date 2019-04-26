@@ -2,7 +2,7 @@
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="120sp"
+        android:layout_height="100sp"
         android:background="#EBEBEB"
 >
     <RelativeLayout
@@ -11,35 +11,29 @@
             android:layout_marginTop="5sp"
             android:layout_marginBottom="5sp"
             android:layout_width="match_parent"
-            android:layout_height="120sp">
+            android:layout_height="100sp">
 
-            <LinearLayout
-                    android:orientation="vertical"
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_marginRight="180sp"
+                android:layout_marginLeft="5sp"
+                android:layout_height="match_parent">
+            <TextView
+                    android:id="@+id/ten_khach_hang"
+                    android:text="Cuong Le"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000"
                     android:layout_width="match_parent"
-                    android:layout_marginRight="180sp"
-                    android:layout_marginLeft="5sp"
-                    android:layout_height="match_parent">
-                <TextView
-                        android:id="@+id/ten_khach_hang"
-                        android:text="Cuong Le"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#000"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/ngay_dat_hang"
+                    android:text="10/01/2019"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-                <TextView
-                        android:id="@+id/dia_chi_khach_hang"
-                        android:text="Tòa nhà Đường Việt, 30 Nguyễn Hữu Thọ Hải Châu Đà Nẵng"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                <TextView
-                        android:id="@+id/ngay_dat_hang"
-                        android:text="10/01/2019"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
                 android:id="@+id/complete"
