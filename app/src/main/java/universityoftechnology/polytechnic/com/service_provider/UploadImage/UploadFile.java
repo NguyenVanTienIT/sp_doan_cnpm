@@ -26,6 +26,8 @@ public class UploadFile {
                 .load(url)
                 //.setHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("", "multipart/form-data")
+                //.setHeader("", "multipart/form-data")
                 .setMultipartFile("file", file)
                 //.setMultipartParameter("type", "menu")
                 .asString()

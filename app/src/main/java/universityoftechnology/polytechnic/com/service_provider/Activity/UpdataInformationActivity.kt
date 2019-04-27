@@ -104,8 +104,8 @@ class UpdataInformationActivity : AppCompatActivity() {
                 var btm : Bitmap = bundel.get("data") as Bitmap
                 bitmap = btm
                 imageAvatar!!.setImageBitmap(btm)
-                uploadImageToServer()
-                //upload()
+                //uploadImageToServer()
+                upload()
                 //settingImage()
             }
             else if (requestCode == 2){
@@ -115,8 +115,8 @@ class UpdataInformationActivity : AppCompatActivity() {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selection)
                 pathFile = UploadFile.getPathFromURI(selection, applicationContext)
                 Log.d("Ketqua", pathFile)
-                uploadImageToServer()
-                //upload()
+                //uploadImageToServer()
+                upload()
                 //settingImage()
 
             }
@@ -422,9 +422,6 @@ class UpdataInformationActivity : AppCompatActivity() {
         upload.UploadImageToServer(file, applicationContext, url)
     }
 
-    fun uploadImageUsingVolley(){
-
-    }
 
     fun parseImageToJson() : ByteArray{
         var baos : ByteArrayOutputStream =  ByteArrayOutputStream()

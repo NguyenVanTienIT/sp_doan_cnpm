@@ -1,5 +1,6 @@
 package universityoftechnology.polytechnic.com.service_provider.Fragment
 
+import android.app.ProgressDialog
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
@@ -48,6 +49,7 @@ class YeuCau_Fragment : Fragment(){
 
     var linearGiaoHang : LinearLayout? = null
     var linearDatBan : LinearLayout? = null
+    var progress : ProgressDialog? = null
 
     var iconShip : ImageView? = null
     var iconDatBan : ImageView? = null
@@ -88,6 +90,9 @@ class YeuCau_Fragment : Fragment(){
         shipAdapter = ShipAdapter(context!!, listRequestShip!!)
         bookAdapter = BookAdapter(context!!, listRequestBook!!)
 
+        progress = ProgressDialog(activity!!)
+        progress!!.setCancelable(false)
+
         sharedpreference = PreferenceManager.getDefaultSharedPreferences(activity)
         Server = resources.getString(R.string.service)
         initView(view)
@@ -98,6 +103,8 @@ class YeuCau_Fragment : Fragment(){
     override fun onResume() {
         super.onResume()
         if (acceptAndDecline){
+            progress!!.setMessage("Waiting...")
+            progress!!.show()
             getRequestShip(0, statusTab)
             getRequestBook(0, statusTab)
             acceptAndDecline = false
@@ -147,6 +154,7 @@ class YeuCau_Fragment : Fragment(){
     fun initAction(){
         btn_tat_ca!!.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
+
                 txtTatCa!!.setTextColor(resources.getColor(R.color.btn_selected))
                 lineTatCa!!.setBackgroundColor(resources.getColor(R.color.btn_selected))
 
@@ -157,6 +165,9 @@ class YeuCau_Fragment : Fragment(){
                 lineChuaHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
 
                 statusTab = "all"
+                progress!!.setMessage("Waiting...")
+                progress!!.show()
+
                 if (shipTab) {
                     getRequestShip(0, "all")
                 }else{
@@ -178,6 +189,8 @@ class YeuCau_Fragment : Fragment(){
                 lineChuaHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
 
                 statusTab = "complete"
+                progress!!.setMessage("Waiting...")
+                progress!!.show()
                 if (shipTab) {
                     getRequestShip(0, "complete")
                 }else{
@@ -198,6 +211,8 @@ class YeuCau_Fragment : Fragment(){
                 lineHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
 
                 statusTab = "uncomplete"
+                progress!!.setMessage("Waiting...")
+                progress!!.show()
                 if (shipTab) {
                     getRequestShip(0, "uncomplete")
                 }else{
@@ -222,6 +237,8 @@ class YeuCau_Fragment : Fragment(){
 
                 resetDefaultView()
                 statusTab = "all"
+                progress!!.setMessage("Waiting...")
+                progress!!.show()
                 getRequestBook(0, "all")
                 recyclerBook!!.visibility = View.VISIBLE
                 recyclerShip!!.visibility = View.GONE
@@ -239,6 +256,8 @@ class YeuCau_Fragment : Fragment(){
 
                 resetDefaultView()
                 statusTab = "all"
+                progress!!.setMessage("Waiting...")
+                progress!!.show()
                 getRequestShip(0, "all")
                 recyclerBook!!.visibility = View.GONE
                 recyclerShip!!.visibility = View.VISIBLE
@@ -259,6 +278,8 @@ class YeuCau_Fragment : Fragment(){
     }
 
     fun initDataSource(){
+        progress!!.setMessage("Waiting...")
+        progress!!.show()
         getRequestShip(0, "all")
     }
 
@@ -370,6 +391,7 @@ class YeuCau_Fragment : Fragment(){
                 listRequestBook!!.add(book)
             }
         }
+        if (progress != null) progress!!.dismiss()
         bookAdapter!!.notifyDataSetChanged()
     }
 
@@ -418,6 +440,7 @@ class YeuCau_Fragment : Fragment(){
 
             Log.d("Request_Ship",ship._id+"===="+ship.customer!!.name+"==="+ship.customer!!._id)
         }
+        if (progress != null) progress!!.dismiss()
         shipAdapter!!.notifyDataSetChanged()
     }
 

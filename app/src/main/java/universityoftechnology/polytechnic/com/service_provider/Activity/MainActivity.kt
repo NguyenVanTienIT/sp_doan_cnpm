@@ -16,6 +16,9 @@ import org.json.JSONObject
 import universityoftechnology.polytechnic.com.service_provider.R
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.app.PendingIntent
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.TaskStackBuilder
 
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
