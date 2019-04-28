@@ -3,6 +3,19 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_add"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add"
+            android:paddingTop="10sp"
+            android:background="@drawable/back_ground_add_menu"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+             />
+
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="80sp"

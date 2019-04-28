@@ -2,6 +2,7 @@
     <string name="app_name">Service _Provider</string>
     <string name="service">https://do-an-cnpm.herokuapp.com</string>
     <string name="default_notification_channel_id"></string>
+    <string name="server_image">https://s3-ap-southeast-1.amazonaws.com/doancnpm/public/image</string>
     <string-array name="optionl_user">
         <item>Nhân Viên</item>
         <item>Chủ Quán</item>

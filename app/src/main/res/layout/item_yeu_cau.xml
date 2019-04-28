@@ -2,7 +2,7 @@
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="120sp"
+        android:layout_height="wrap_content"
         android:background="#EBEBEB"
 >
     <RelativeLayout
@@ -11,14 +11,14 @@
             android:layout_marginTop="5sp"
             android:layout_marginBottom="5sp"
             android:layout_width="match_parent"
-            android:layout_height="120sp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_marginRight="180sp"
                     android:layout_marginLeft="5sp"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                 <TextView
                         android:id="@+id/ten_khach_hang"
                         android:text="Cuong Le"

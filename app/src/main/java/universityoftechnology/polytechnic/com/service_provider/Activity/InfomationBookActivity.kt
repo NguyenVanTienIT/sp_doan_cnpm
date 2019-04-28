@@ -2,11 +2,13 @@ package universityoftechnology.polytechnic.com.service_provider.Activity
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -36,6 +38,11 @@ class InfomationBookActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_infomation_book)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            val w = window // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        }
 
         var intent : Intent = getIntent()
         sharedpreference = PreferenceManager.getDefaultSharedPreferences(applicationContext)

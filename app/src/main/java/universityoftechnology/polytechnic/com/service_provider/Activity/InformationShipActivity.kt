@@ -2,6 +2,7 @@ package universityoftechnology.polytechnic.com.service_provider.Activity
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -10,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -47,6 +49,11 @@ class InformationShipActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_information_ship)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            val w = window // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        }
 
         listProduct = ArrayList()
         sharedpreference = PreferenceManager.getDefaultSharedPreferences(applicationContext)

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Activity.InformationMenuActivity">
+
+    <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="80sp"
+            android:background="#006837"
+    >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tạo mới"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+        />
+
+        <ImageButton
+                android:id="@+id/back"
+                android:layout_marginLeft="20sp"
+                android:layout_centerVertical="true"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:src="@drawable/ic_back"
+                android:background="#006837"
+        />
+    </RelativeLayout>
+
+
+    <LinearLayout
+            android:layout_below="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+    >
+
+        <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="200sp"
+                android:background="#FAFBFC"
+        >
+            <TextView
+                    android:id="@+id/title_hinhanh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hình ảnh"
+                    android:layout_marginLeft="20sp"
+                    android:textColor="#006837"
+            />
+
+            <RelativeLayout
+                    android:layout_below="@+id/title_hinhanh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <ImageView
+                        android:id="@+id/thumnail"
+                        android:src="@drawable/avatar_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                <ImageView
+                        android:id="@+id/upload"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_cloud_upload"
+                        android:layout_width="50sp"
+                        android:layout_height="50sp"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20sp"
+                android:layout_marginRight="20sp"
+                android:background="#FFFFFF"
+        >
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tên"
+                    android:textColor="#006837"
+            />
+            <EditText
+                    android:id="@+id/name"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tên đồ ăn đồ uống"
+            />
+            <LinearLayout
+                    android:layout_marginTop="5sp"
+                    android:id="@+id/error_name"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:id="@+id/txt_error_name"
+                        android:textStyle="italic"
+                        android:textColor="#FF4939"
+                        android:text="Trường này không được bỏ trống"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <View
+                        android:layout_marginTop="5sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1sp"
+                        android:background="#000"
+                />
+
+            </LinearLayout>
+
+
+
+
+
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mô tả"
+                    android:textColor="#006837"
+            />
+            <EditText
+                    android:id="@+id/descreption"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mô tả"
+            />
+            <LinearLayout
+                    android:layout_marginTop="5sp"
+                    android:id="@+id/error_descreption"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:textStyle="italic"
+                        android:textColor="#FF4939"
+                        android:text="Trường này không được để trống"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <View
+                        android:layout_marginTop="5sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1sp"
+                        android:background="#000"
+                />
+
+            </LinearLayout>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giá"
+                    android:textColor="#006837"
+            />
+            <EditText
+                    android:id="@+id/price"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Giá của sản phẩm"
+            />
+            <LinearLayout
+                    android:layout_marginTop="5sp"
+                    android:id="@+id/error_price"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:id="@+id/txt_error_price"
+                        android:textStyle="italic"
+                        android:textColor="#FF4939"
+                        android:text="Trường này không được để trống"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <View
+                        android:layout_marginTop="5sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1sp"
+                        android:background="#000"
+                />
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50sp">
+                <Button
+                        android:id="@+id/save"
+                        android:background="#006837"
+                        android:text="Lưu"
+                        android:textColor="#FFF"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10sp"
+                />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

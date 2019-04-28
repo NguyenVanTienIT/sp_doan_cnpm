@@ -69,8 +69,9 @@ class YeuCau_Fragment : Fragment(){
     var statusTab : String = "all"
 
     var sharedpreference : SharedPreferences? = null
-
     var Server : String? = null
+    var curentShip : Int = 1
+    var curentBook : Int = 1
 
     companion object {
         var acceptAndDecline : Boolean = false
@@ -87,8 +88,8 @@ class YeuCau_Fragment : Fragment(){
 
         listRequestBook = ArrayList()
         listRequestShip = ArrayList()
-        shipAdapter = ShipAdapter(context!!, listRequestShip!!)
-        bookAdapter = BookAdapter(context!!, listRequestBook!!)
+        shipAdapter = ShipAdapter(context!!, listRequestShip!!, this@YeuCau_Fragment)
+        bookAdapter = BookAdapter(context!!, listRequestBook!!, this@YeuCau_Fragment)
 
         progress = ProgressDialog(activity!!)
         progress!!.setCancelable(false)
@@ -167,6 +168,8 @@ class YeuCau_Fragment : Fragment(){
                 statusTab = "all"
                 progress!!.setMessage("Waiting...")
                 progress!!.show()
+                curentShip = 1
+                curentBook = 1
 
                 if (shipTab) {
                     getRequestShip(0, "all")
@@ -188,6 +191,8 @@ class YeuCau_Fragment : Fragment(){
                 txtChuaHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
                 lineChuaHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
 
+                curentShip = 1
+                curentBook = 1
                 statusTab = "complete"
                 progress!!.setMessage("Waiting...")
                 progress!!.show()
@@ -210,6 +215,8 @@ class YeuCau_Fragment : Fragment(){
                 txtHoanThanh!!.setTextColor(resources.getColor(R.color.btn_none_selected))
                 lineHoanThanh!!.setBackgroundColor(resources.getColor(R.color.btn_none_selected))
 
+                curentShip = 1
+                curentBook = 1
                 statusTab = "uncomplete"
                 progress!!.setMessage("Waiting...")
                 progress!!.show()
@@ -236,6 +243,8 @@ class YeuCau_Fragment : Fragment(){
                 txtShip!!.setTextColor(Color.parseColor("#747474"))
 
                 resetDefaultView()
+                curentShip = 1
+                curentBook = 1
                 statusTab = "all"
                 progress!!.setMessage("Waiting...")
                 progress!!.show()
@@ -255,6 +264,8 @@ class YeuCau_Fragment : Fragment(){
                 txtDatban!!.setTextColor(Color.parseColor("#747474"))
 
                 resetDefaultView()
+                curentShip = 1
+                curentBook = 1
                 statusTab = "all"
                 progress!!.setMessage("Waiting...")
                 progress!!.show()
@@ -294,8 +305,11 @@ class YeuCau_Fragment : Fragment(){
                     var jobj = JSONObject(s)
                     var data: JSONArray? = jobj.getJSONArray("data")
                    // Log.d("Request_Ship", data!![0].toString())
-                    if (data != null)
-                    initDataShip(data!!, status)
+                    if (data != null) {
+                        if (currentPage == 0)
+                        initDataShip(data!!, status)
+                        else initMoreShip(data!!, status)
+                    }
 
             },
             Response.ErrorListener { e ->
@@ -330,8 +344,11 @@ class YeuCau_Fragment : Fragment(){
                 var jobj = JSONObject(s)
                 var data: JSONArray? = jobj.getJSONArray("data")
                 // Log.d("Request_Ship", data!![0].toString())
-                if (data != null)
+                if (data != null) {
+                    if (currentPage == 0)
                     initDataBook(data!!, status)
+                    else initMoreBook(data!!, status)
+                }
 
             },
             Response.ErrorListener { e ->
@@ -397,7 +414,53 @@ class YeuCau_Fragment : Fragment(){
 
     fun initDataShip(data : JSONArray?, status : String){
         deleteAllShip()
+        for (i in 0..data!!.length()-1){
+            var jsonShip : JSONObject = JSONObject(data[i].toString())
 
+            var ship : Ship = Ship()
+            ship._id = jsonShip.getString("_id")
+            ship.oderNumber = jsonShip.getString("orderNumber")
+            ship.createAt = jsonShip.getString("createdAt")
+            ship.__v  = jsonShip.getInt("__v")
+            ship.address = jsonShip.getString("address")
+            ship.notes = jsonShip.getString("notes")
+            ship.telephone = jsonShip.getString("telephone")
+            ship.status = jsonShip.getInt("status")
+            ship.isDeleted = jsonShip.getBoolean("isDeleted")
+            ship.isNotified = jsonShip.getBoolean("isNotified")
+            ship.priceTotal = jsonShip.getInt("priceTotal")
+
+            var jsonProvider : JSONObject = JSONObject(jsonShip.getString("provider"))
+            ship.provider = HashMap()
+            ship.provider!!.put("_id", jsonProvider.getString("_id"))
+
+            var jsonCustomer : JSONObject = JSONObject(jsonShip.getString("customer"))
+            var customer : CustomerShip = CustomerShip()
+            customer._id = jsonCustomer.getString("_id")
+            customer.name = jsonCustomer.getString("name")
+            var savedAddress : SavedAddress = SavedAddress()
+            savedAddress.parseObject(JSONObject(jsonCustomer.getString("savedAddress")))
+            customer.savedAddress = savedAddress
+            ship.customer = customer
+
+            ship.jsonShip = data[i].toString()
+
+            ship.listDish = jsonShip.getJSONArray("listDish")
+            if (status.equals("complete")){
+                if (ship.status == 2) listRequestShip!!.add(ship)
+            }else if (status.equals("uncomplete")){
+                if (ship.status != 2) listRequestShip!!.add(ship)
+            }else{
+                listRequestShip!!.add(ship)
+            }
+            Log.d("Request_Ship",ship._id+"===="+ship.customer!!.name+"==="+ship.customer!!._id)
+        }
+
+        if (progress != null) progress!!.dismiss()
+        shipAdapter!!.notifyDataSetChanged()
+    }
+
+    fun initMoreShip(data: JSONArray?, status: String){
         for (i in 0..data!!.length()-1){
             var jsonShip : JSONObject = JSONObject(data[i].toString())
 
@@ -442,6 +505,45 @@ class YeuCau_Fragment : Fragment(){
         }
         if (progress != null) progress!!.dismiss()
         shipAdapter!!.notifyDataSetChanged()
+    }
+
+    fun initMoreBook(data: JSONArray?, status: String){
+        for (i in 0..data!!.length()-1!!){
+            var jsonBook : JSONObject = JSONObject(data[i].toString())
+            var book : Book = Book()
+
+            book._id = jsonBook.getString("_id")
+            book.conditions = jsonBook.getString("conditions")
+            book.dateTime = jsonBook.getString("dateTime")
+            book.numberOfCustomer = jsonBook.getString("numberOfCustomer")
+            book.botName = jsonBook.getString("botName")
+            book.__v = jsonBook.getInt("__v")
+            book.status = jsonBook.getInt("status")
+            book.updatedAt = jsonBook.getString("updatedAt")
+            book.createdAt = jsonBook.getString("createdAt")
+            book.isDeleted = jsonBook.getBoolean("isDeleted")
+            book.isActive = jsonBook.getBoolean("isActive")
+            book.isNotified = jsonBook.getBoolean("isNotified")
+
+            var jsonProvider : JSONObject = JSONObject(jsonBook.getString("provider"))
+            book.provider.put("_id", jsonProvider.getString("_id"))
+
+            var jsonCustomer : JSONObject = JSONObject(jsonBook.getString("customer"))
+            book.customer.put("_id", jsonCustomer.getString("_id"))
+            book.customer.put("name", jsonCustomer.getString("name"))
+
+            book.jsonBook = data[i].toString()
+
+            if (status.equals("complete")){
+                if (book.status == 2) listRequestBook!!.add(book)
+            }else if (status.equals("uncomplete")){
+                if (book.status != 2) listRequestBook!!.add(book)
+            }else{
+                listRequestBook!!.add(book)
+            }
+        }
+        if (progress != null) progress!!.dismiss()
+        bookAdapter!!.notifyDataSetChanged()
     }
 
     fun deleteAllShip(){

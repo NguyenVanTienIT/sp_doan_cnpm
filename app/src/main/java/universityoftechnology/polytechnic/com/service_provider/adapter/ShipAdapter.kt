@@ -11,48 +11,67 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import universityoftechnology.polytechnic.com.service_provider.Activity.InformationShipActivity
+import universityoftechnology.polytechnic.com.service_provider.Fragment.YeuCau_Fragment
+import universityoftechnology.polytechnic.com.service_provider.Interface.LoadMore
 import universityoftechnology.polytechnic.com.service_provider.R
 import universityoftechnology.polytechnic.com.service_provider.model.Ship
 
-class ShipAdapter(con : Context, list : ArrayList<Ship>) : RecyclerView.Adapter<ShipAdapter.ShipViewHoder>() {
+class ShipAdapter(con : Context, list : ArrayList<Ship>, fra : YeuCau_Fragment) : RecyclerView.Adapter<ShipAdapter.ShipViewHoder>() {
     var context : Context? = null
     var listShip : ArrayList<Ship>? = null
+    var fragment : YeuCau_Fragment? = null
     init {
         context = con
         listShip = list
+        fragment = fra
     }
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ShipViewHoder {
-        var view : View = LayoutInflater.from(context).inflate(R.layout.item_yeu_cau, p0,false)
-        return ShipViewHoder(view)
+        var view1 : View = LayoutInflater.from(context).inflate(R.layout.item_yeu_cau, p0,false)
+        var view2 : View = LayoutInflater.from(context).inflate(R.layout.item_load_more, p0,false)
+        var view3 : View = LayoutInflater.from(context).inflate(R.layout.item_no_load_more, p0,false)
+        if (p1 == 1)
+        return ShipViewHoder(view1)
+        else {
+            return ShipViewHoder(view2)
+        }
     }
 
     override fun getItemCount(): Int {
-        return listShip!!.size
+        return listShip!!.size+1
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (listShip!!.size == position) return 2
+        else return 1
     }
 
     override fun onBindViewHolder(p0: ShipViewHoder, p1: Int) {
-        var ship : Ship = listShip!!.get(p1)
-        p0.bind(ship)
-        p0.btnLoadView!!.setOnClickListener(object : View.OnClickListener{
+        if (p1 < listShip!!.size) {
+            var ship: Ship = listShip!!.get(p1)
+            p0.bind(ship)
+            p0.itemMain!!.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    var intent: Intent = Intent(context, InformationShipActivity::class.java)
+                    intent.putExtra("status", ship.status)
+                    intent.putExtra("address", ship.address)
+                    intent.putExtra("createAt", ship.createAt)
+                    intent.putExtra("telephone", ship.telephone)
+                    intent.putExtra("name", ship.customer!!.name)
+                    intent.putExtra("listproduct", ship.listDish.toString())
+                    intent.putExtra("jsonShip", ship.jsonShip)
+                    context!!.startActivity(intent)
+                }
+            })
+        }
+        p0.btnLoadView!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-
-            }
-        })
-
-        p0.itemMain!!.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                var intent : Intent = Intent(context, InformationShipActivity::class.java)
-                intent.putExtra("status", ship.status)
-                intent.putExtra("address", ship.address)
-                intent.putExtra("createAt", ship.createAt)
-                intent.putExtra("telephone", ship.telephone)
-                intent.putExtra("name", ship.customer!!.name)
-                intent.putExtra("listproduct", ship.listDish.toString())
-                intent.putExtra("jsonShip", ship.jsonShip)
-                context!!.startActivity(intent)
+                fragment!!.getRequestShip(fragment!!.curentShip, fragment!!.statusTab)
+                fragment!!.curentShip ++
             }
         })
     }
+
+
 
 
     inner class ShipViewHoder(itemView : View) : RecyclerView.ViewHolder(itemView){
