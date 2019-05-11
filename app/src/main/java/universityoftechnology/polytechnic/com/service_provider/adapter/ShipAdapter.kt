@@ -16,28 +16,31 @@ import universityoftechnology.polytechnic.com.service_provider.Interface.LoadMor
 import universityoftechnology.polytechnic.com.service_provider.R
 import universityoftechnology.polytechnic.com.service_provider.model.Ship
 
-class ShipAdapter(con : Context, list : ArrayList<Ship>, fra : YeuCau_Fragment) : RecyclerView.Adapter<ShipAdapter.ShipViewHoder>() {
-    var context : Context? = null
-    var listShip : ArrayList<Ship>? = null
-    var fragment : YeuCau_Fragment? = null
+class ShipAdapter(con: Context, list: ArrayList<Ship>, fra: YeuCau_Fragment) :
+    RecyclerView.Adapter<ShipAdapter.ShipViewHoder>() {
+    var context: Context? = null
+    var listShip: ArrayList<Ship>? = null
+    var fragment: YeuCau_Fragment? = null
+
     init {
         context = con
         listShip = list
         fragment = fra
     }
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ShipViewHoder {
-        var view1 : View = LayoutInflater.from(context).inflate(R.layout.item_yeu_cau, p0,false)
-        var view2 : View = LayoutInflater.from(context).inflate(R.layout.item_load_more, p0,false)
-        var view3 : View = LayoutInflater.from(context).inflate(R.layout.item_no_load_more, p0,false)
+        var view1: View = LayoutInflater.from(context).inflate(R.layout.item_yeu_cau, p0, false)
+        var view2: View = LayoutInflater.from(context).inflate(R.layout.item_load_more, p0, false)
+        var view3: View = LayoutInflater.from(context).inflate(R.layout.item_no_load_more, p0, false)
         if (p1 == 1)
-        return ShipViewHoder(view1)
+            return ShipViewHoder(view1)
         else {
             return ShipViewHoder(view2)
         }
     }
 
     override fun getItemCount(): Int {
-        return listShip!!.size+1
+        return listShip!!.size + 1
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -66,23 +69,21 @@ class ShipAdapter(con : Context, list : ArrayList<Ship>, fra : YeuCau_Fragment) 
         p0.btnLoadView!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 fragment!!.getRequestShip(fragment!!.curentShip, fragment!!.statusTab)
-                fragment!!.curentShip ++
+                fragment!!.curentShip++
             }
         })
     }
 
 
+    inner class ShipViewHoder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var txtTen_Khach_Hang: TextView? = null
+        var txtDia_Chi: TextView? = null
+        var txtThoi_Gian: TextView? = null
+        var itemMain: RelativeLayout? = null
 
-
-    inner class ShipViewHoder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        var txtTen_Khach_Hang : TextView? = null
-        var txtDia_Chi : TextView? = null
-        var txtThoi_Gian : TextView? = null
-        var itemMain : RelativeLayout? = null
-
-        var labelComplete : LinearLayout? = null
-        var labelNoneComplete : LinearLayout? = null
-        var btnLoadView : Button? = null
+        var labelComplete: LinearLayout? = null
+        var labelNoneComplete: LinearLayout? = null
+        var btnLoadView: Button? = null
 
         init {
             txtTen_Khach_Hang = itemView.findViewById(R.id.ten_khach_hang)
@@ -95,15 +96,14 @@ class ShipAdapter(con : Context, list : ArrayList<Ship>, fra : YeuCau_Fragment) 
             itemMain = itemView.findViewById(R.id.request_item)
         }
 
-        fun bind(ship : Ship){
+        fun bind(ship: Ship) {
             txtTen_Khach_Hang!!.setText(ship.customer!!.name)
             txtDia_Chi!!.setText(ship.address)
             txtThoi_Gian!!.setText(ship.createAt)
-            if (ship.status == 2){
+            if (ship.status == 2) {
                 labelComplete!!.visibility = View.VISIBLE
                 labelNoneComplete!!.visibility = View.GONE
-            }
-            else{
+            } else {
                 labelComplete!!.visibility = View.GONE
                 labelNoneComplete!!.visibility = View.VISIBLE
             }

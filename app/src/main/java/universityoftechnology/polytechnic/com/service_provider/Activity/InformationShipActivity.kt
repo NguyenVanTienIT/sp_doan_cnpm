@@ -29,22 +29,22 @@ import universityoftechnology.polytechnic.com.service_provider.model.Ship
 class InformationShipActivity : AppCompatActivity() {
 
 
-    var txtTime : TextView? = null
-    var txtName : TextView? = null
-    var txtPhoneNumber : TextView? = null
-    var txtAddress : TextView? = null
-    var listProviderView : RecyclerView? = null
-    var listProduct : ArrayList<Product>? = null
-    var productAdapter : ProviderAdapter? = null
+    var txtTime: TextView? = null
+    var txtName: TextView? = null
+    var txtPhoneNumber: TextView? = null
+    var txtAddress: TextView? = null
+    var listProviderView: RecyclerView? = null
+    var listProduct: ArrayList<Product>? = null
+    var productAdapter: ProviderAdapter? = null
 
-    var listButton : LinearLayout? = null
-    var btnAccept : Button? = null
-    var btnDeline : Button? = null
-    var btnBack : ImageButton? = null
+    var listButton: LinearLayout? = null
+    var btnAccept: Button? = null
+    var btnDeline: Button? = null
+    var btnBack: ImageButton? = null
 
-    var jsonShip : String? = null
-    var sharedpreference : SharedPreferences? = null
-    var Server : String? = null
+    var jsonShip: String? = null
+    var sharedpreference: SharedPreferences? = null
+    var Server: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +52,10 @@ class InformationShipActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             val w = window // in Activity's onCreate() for instance
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+            w.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
         }
 
         listProduct = ArrayList()
@@ -74,7 +77,7 @@ class InformationShipActivity : AppCompatActivity() {
         return
     }
 
-    fun initView(intent : Intent){
+    fun initView(intent: Intent) {
         txtTime = findViewById(R.id.time)
         txtName = findViewById(R.id.name)
         txtPhoneNumber = findViewById(R.id.number_phone)
@@ -86,7 +89,7 @@ class InformationShipActivity : AppCompatActivity() {
         btnDeline = findViewById(R.id.decline)
         btnBack = findViewById(R.id.btn_back)
 
-        if (intent.getIntExtra("status", 0) == 2 ) listButton!!.visibility = View.GONE
+        if (intent.getIntExtra("status", 0) == 2) listButton!!.visibility = View.GONE
 
         txtTime!!.setText(intent.getStringExtra("createAt"))
         txtAddress!!.setText(intent.getStringExtra("address"))
@@ -95,7 +98,8 @@ class InformationShipActivity : AppCompatActivity() {
 
 
         listProviderView!!.layoutManager = LinearLayoutManager(applicationContext) as RecyclerView.LayoutManager?
-        val itemDecoration = DividerItemDecoration(applicationContext, LinearLayoutManager(applicationContext).orientation)
+        val itemDecoration =
+            DividerItemDecoration(applicationContext, LinearLayoutManager(applicationContext).orientation)
         listProviderView!!.setHasFixedSize(true)
         listProviderView!!.setLayoutManager(LinearLayoutManager(applicationContext))
         listProviderView!!.addItemDecoration(itemDecoration)
@@ -104,34 +108,35 @@ class InformationShipActivity : AppCompatActivity() {
         getListProvice(JSONArray(intent.getStringExtra("listproduct")))
     }
 
-    fun initAction(){
-        btnAccept!!.setOnClickListener(object : View.OnClickListener{
+    fun initAction() {
+        btnAccept!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 acceptShip()
             }
         })
 
-        btnDeline!!.setOnClickListener(object : View.OnClickListener{
+        btnDeline!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 declineShip()
             }
         })
 
-        btnBack!!.setOnClickListener(object : View.OnClickListener{
+        btnBack!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                finish()            }
+                finish()
+            }
         })
     }
 
-    fun acceptShip(){
+    fun acceptShip() {
         var index = jsonShip!!.lastIndexOf("\"status\":")
-        var json : String = jsonShip!!.substring(0, index + 9)+"2"+jsonShip!!.substring(index + 10)
-        Log.d("ACCEPT_SHIP", jsonShip!!.substring(0, index + 9)+"2"+jsonShip!!.substring(index + 10))
+        var json: String = jsonShip!!.substring(0, index + 9) + "2" + jsonShip!!.substring(index + 10)
+        Log.d("ACCEPT_SHIP", jsonShip!!.substring(0, index + 9) + "2" + jsonShip!!.substring(index + 10))
 
         var token = sharedpreference!!.getString("token", null)
         var url: String = Server + "/provider/ships/updateShip"
         var requestQueue: RequestQueue = Volley.newRequestQueue(applicationContext)
-        var stringRequest : StringRequest = object : StringRequest(
+        var stringRequest: StringRequest = object : StringRequest(
             Request.Method.POST, url,
             Response.Listener { s ->
 
@@ -144,13 +149,13 @@ class InformationShipActivity : AppCompatActivity() {
             },
             Response.ErrorListener { e ->
                 Log.d("Accept_Ship", e.toString())
-            }){
+            }) {
             override fun getBody(): ByteArray {
                 return json.toByteArray()
             }
 
             override fun getHeaders(): MutableMap<String, String> {
-                var headers : HashMap<String, String> = HashMap<String, String>()
+                var headers: HashMap<String, String> = HashMap<String, String>()
 
                 headers.put("Content-Type", "application/json")
                 headers.put("Authorization", token)
@@ -160,15 +165,15 @@ class InformationShipActivity : AppCompatActivity() {
         requestQueue.add(stringRequest)
     }
 
-    fun declineShip(){
+    fun declineShip() {
         var index = jsonShip!!.lastIndexOf("\"status\":")
-        var json : String = jsonShip!!.substring(0, index + 9)+"3"+jsonShip!!.substring(index + 10)
-        Log.d("ACCEPT_SHIP", jsonShip!!.substring(0, index + 9)+"2"+jsonShip!!.substring(index + 10))
+        var json: String = jsonShip!!.substring(0, index + 9) + "3" + jsonShip!!.substring(index + 10)
+        Log.d("ACCEPT_SHIP", jsonShip!!.substring(0, index + 9) + "2" + jsonShip!!.substring(index + 10))
 
         var token = sharedpreference!!.getString("token", null)
         var url: String = Server + "/provider/ships/updateShip"
         var requestQueue: RequestQueue = Volley.newRequestQueue(applicationContext)
-        var stringRequest : StringRequest = object : StringRequest(
+        var stringRequest: StringRequest = object : StringRequest(
             Request.Method.POST, url,
             Response.Listener { s ->
 
@@ -181,13 +186,13 @@ class InformationShipActivity : AppCompatActivity() {
             },
             Response.ErrorListener { e ->
                 Log.d("Accept_Ship", e.toString())
-            }){
+            }) {
             override fun getBody(): ByteArray {
                 return json.toByteArray()
             }
 
             override fun getHeaders(): MutableMap<String, String> {
-                var headers : HashMap<String, String> = HashMap<String, String>()
+                var headers: HashMap<String, String> = HashMap<String, String>()
 
                 headers.put("Content-Type", "application/json")
                 headers.put("Authorization", token)
@@ -197,9 +202,9 @@ class InformationShipActivity : AppCompatActivity() {
         requestQueue.add(stringRequest)
     }
 
-    fun getListProvice(json : JSONArray){
-        for (i in 0..json.length()-1){
-            var product : Product = Product()
+    fun getListProvice(json: JSONArray) {
+        for (i in 0..json.length() - 1) {
+            var product: Product = Product()
             var jsonProduct = JSONObject(json[i].toString())
             product.name = jsonProduct.getString("name")
             product.id = jsonProduct.getString("id")

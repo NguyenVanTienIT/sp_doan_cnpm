@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
             android:allowBackup="true"
@@ -75,7 +76,9 @@
         <activity
                 android:name=".Activity.RegisterActivity"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppTheme2">
+                android:theme="@style/AppTheme2"
+                android:windowSoftInputMode="adjustPan"
+        >
         </activity>
         <activity
                 android:name=".Activity.MainActivity"

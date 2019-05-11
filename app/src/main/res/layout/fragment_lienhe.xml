@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_call"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_call"
+            android:paddingTop="10sp"
+            android:background="@drawable/back_ground_add_menu"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+    />
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_gmail"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_contact_mail"
+            android:paddingTop="10sp"
+            android:background="@drawable/back_ground_add_menu"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+    />
+
+    <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="80sp"
+            android:background="#006837"
+    >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Liên hệ"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+        />
+
+        <ImageButton
+                android:id="@+id/menu"
+                android:layout_marginLeft="20sp"
+                android:layout_centerVertical="true"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:src="@drawable/ic_menu"
+                android:background="#006837"
+        />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_below="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+                android:id="@+id/gioi_thieu"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:text="Để liên hệ với chúng tôi nếu bạn gặp vấn đề nào đó , vui lòng liên hệ với chúng tôi bằng những hình thức dưới đây "
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

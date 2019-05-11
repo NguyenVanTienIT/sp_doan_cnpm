@@ -1,5 +1,6 @@
 package universityoftechnology.polytechnic.com.service_provider.Activity
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -11,6 +12,7 @@ import universityoftechnology.polytechnic.com.service_provider.R
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.AlertDialog
 import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
@@ -20,6 +22,7 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.android.volley.Request
@@ -30,7 +33,9 @@ import com.android.volley.toolbox.Volley
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
+import universityoftechnology.polytechnic.com.service_provider.Fragment.LienHe_Fragment
 import universityoftechnology.polytechnic.com.service_provider.Fragment.ThucDon_Fragment
 import universityoftechnology.polytechnic.com.service_provider.Fragment.TrangChu_Fragment
 import universityoftechnology.polytechnic.com.service_provider.Fragment.YeuCau_Fragment
@@ -39,19 +44,23 @@ import universityoftechnology.polytechnic.com.service_provider.model.Information
 
 class HomeActivity : AppCompatActivity() {
 
-    var optionMenu : NavigationView? = null
-    var mDrawable : DrawerLayout? = null
-    var sharedpreference : SharedPreferences? = null
-    var information : RelativeLayout? = null
-    var txtTenQuan : TextView? = null
-    var txtDiaChiQuan : TextView? = null
+    var optionMenu: NavigationView? = null
+    var mDrawable: DrawerLayout? = null
+    var sharedpreference: SharedPreferences? = null
+    var information: RelativeLayout? = null
+    var txtTenQuan: TextView? = null
+    var avatarQuan: ImageView? = null
+    var txtDiaChiQuan: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(universityoftechnology.polytechnic.com.service_provider.R.layout.activity_home)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             val w = window // in Activity's onCreate() for instance
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+            w.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
         }
         sharedpreference = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -62,16 +71,14 @@ class HomeActivity : AppCompatActivity() {
             .addOnCompleteListener(OnCompleteListener { task ->
 
                 if (!task.isSuccessful) {
-                    Log.d("Device_Token", "Lỗi rồi"+ task.toString())
+                    Log.d("Device_Token", "Lỗi rồi" + task.toString())
                     return@OnCompleteListener
-                }
-                else {
+                } else {
 
-                    var token : String? = task.result!!.token
+                    var token: String? = task.result!!.token
                     Log.d("Device_Token", token)
                     if (token != null)
                         sendDeviceToken(token.toString())
-
                 }
             })
     }
@@ -85,21 +92,59 @@ class HomeActivity : AppCompatActivity() {
         return
     }
 
-    fun sendDeviceToken(deviceToken : String){
+    fun transactionFragmentThucDon() {
+        var p0 = optionMenu!!.menu.getItem(1)
+        resetMenu()
+        var spanString: SpannableString = SpannableString(p0.title.toString())
+        spanString.setSpan(
+            ForegroundColorSpan(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.item_slected
+                )
+            ), 0, spanString.length, 0
+        )
+        p0.setTitle(spanString)
+        Log.d("Choose_Navigation", "Đã chọn")
+        ///mDrawable!!.closeDrawer(Gravity.LEFT)
+        supportFragmentManager.beginTransaction().replace(R.id.layout_main, ThucDon_Fragment()).commit()
+    }
+
+    fun transactionFragmentYeuCau() {
+        var p0 = optionMenu!!.menu.getItem(2)
+        resetMenu()
+        var spanString: SpannableString = SpannableString(p0.title.toString())
+        spanString.setSpan(
+            ForegroundColorSpan(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.item_slected
+                )
+            ), 0, spanString.length, 0
+        )
+        p0.setTitle(spanString)
+        Log.d("Choose_Navigation", "Đã chọn")
+        ///mDrawable!!.closeDrawer(Gravity.LEFT)
+        supportFragmentManager.beginTransaction().replace(R.id.layout_main, YeuCau_Fragment()).commit()
+    }
+
+
+    fun sendDeviceToken(deviceToken: String) {
         var token = sharedpreference!!.getString("token", null)
         if (token == null) return
-        var url: String = resources.getString(universityoftechnology.polytechnic.com.service_provider.R.string.service) + "/provider/deviceToken/add"
-        Log.d("Device_Token", url+" "+token)
+        var url: String =
+            resources.getString(universityoftechnology.polytechnic.com.service_provider.R.string.service) + "/provider/deviceToken/add"
+        Log.d("Device_Token", url + " " + token)
         var requestQueue: RequestQueue = Volley.newRequestQueue(this)
         Log.d("Device_Token", requestQueue.toString())
-        var stringRequest : StringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { s ->
+        var stringRequest: StringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { s ->
             var jobj = JSONObject(s)
             Log.d("Device_Token", jobj.toString())
         }, Response.ErrorListener { e ->
             Log.d("Device_Token", e.toString())
-        }){
+        }) {
             override fun getHeaders(): MutableMap<String, String> {
-                var headers : HashMap<String, String> = HashMap<String, String>()
+                var headers: HashMap<String, String> = HashMap<String, String>()
 
                 headers.put("Content-Type", "application/json")
                 //headers.put("Authorization", "\""+token+"\"")
@@ -108,7 +153,7 @@ class HomeActivity : AppCompatActivity() {
             }
 
             override fun getBody(): ByteArray {
-                var device_token = "{\"deviceToken\":"+"\""+deviceToken+"\"}"
+                var device_token = "{\"deviceToken\":" + "\"" + deviceToken + "\"}"
                 //var device_token = "deviceToken:"+token
                 return device_token.toByteArray()
             }
@@ -118,70 +163,108 @@ class HomeActivity : AppCompatActivity() {
         requestQueue.add(stringRequest)
     }
 
-   fun initView(){
-       mDrawable = findViewById(R.id.drawer_menu)
-       optionMenu = findViewById(R.id.navigation_menu)
-       var header = optionMenu!!.getHeaderView(0)
-       information = header.findViewById(R.id.information_restaurant)
-       txtTenQuan = header.findViewById(R.id.ten_quan)
-       txtDiaChiQuan = header.findViewById(R.id.diachi_quan)
-       optionMenu!!.bringToFront()
-       resetMenu()
+    fun initView() {
+        mDrawable = findViewById(R.id.drawer_menu)
+        optionMenu = findViewById(R.id.navigation_menu)
+        var header = optionMenu!!.getHeaderView(0)
+        information = header.findViewById(R.id.information_restaurant)
+        txtTenQuan = header.findViewById(R.id.ten_quan)
+        avatarQuan = header.findViewById(R.id.avatar)
+        txtDiaChiQuan = header.findViewById(R.id.diachi_quan)
+        optionMenu!!.bringToFront()
+        resetMenu()
 
-       supportFragmentManager.beginTransaction().add(R.id.layout_main, TrangChu_Fragment()).commit()
-       optionMenu!!.setCheckedItem(R.id.trangchu)
-       var spanString : SpannableString = SpannableString(optionMenu!!.checkedItem!!.title.toString())
-       spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
-       optionMenu!!.checkedItem!!.setTitle(spanString)
+        supportFragmentManager.beginTransaction().add(R.id.layout_main, TrangChu_Fragment()).commit()
+        optionMenu!!.setCheckedItem(R.id.trangchu)
+        var spanString: SpannableString = SpannableString(optionMenu!!.checkedItem!!.title.toString())
+        spanString.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)),
+            0,
+            spanString.length,
+            0
+        )
+        optionMenu!!.checkedItem!!.setTitle(spanString)
 
-   }
+    }
 
-    fun initEvent(){
-        optionMenu!!.setNavigationItemSelectedListener(object : NavigationView.OnNavigationItemSelectedListener{
+    fun initEvent() {
+        optionMenu!!.setNavigationItemSelectedListener(object : NavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(p0: MenuItem): Boolean {  // set event click item menu
                 var id = p0.itemId
-                if(id == R.id.trangchu){
+                if (id == R.id.trangchu) {
                     resetMenu()
-                    var spanString : SpannableString = SpannableString(p0.title.toString())
-                    spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
+                    var spanString: SpannableString = SpannableString(p0.title.toString())
+                    spanString.setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.item_slected
+                            )
+                        ), 0, spanString.length, 0
+                    )
                     p0.setTitle(spanString)
                     mDrawable!!.closeDrawer(Gravity.LEFT)
                     supportFragmentManager.beginTransaction().replace(R.id.layout_main, TrangChu_Fragment()).commit()
-                }
-                else if (id == R.id.thucdon){
+                } else if (id == R.id.thucdon) {
                     resetMenu()
-                    var spanString : SpannableString = SpannableString(p0.title.toString())
-                    spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
+                    var spanString: SpannableString = SpannableString(p0.title.toString())
+                    spanString.setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.item_slected
+                            )
+                        ), 0, spanString.length, 0
+                    )
                     p0.setTitle(spanString)
                     Log.d("Choose_Navigation", "Đã chọn")
                     mDrawable!!.closeDrawer(Gravity.LEFT)
                     supportFragmentManager.beginTransaction().replace(R.id.layout_main, ThucDon_Fragment()).commit()
-                }
-                else if (id == R.id.lienhe){
+                } else if (id == R.id.lienhe) {
                     resetMenu()
-                    var spanString : SpannableString = SpannableString(p0.title.toString())
-                    spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
+                    var spanString: SpannableString = SpannableString(p0.title.toString())
+                    spanString.setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.item_slected
+                            )
+                        ), 0, spanString.length, 0
+                    )
                     p0.setTitle(spanString)
                     mDrawable!!.closeDrawer(Gravity.LEFT)
-                }
-                else if (id == R.id.doi_mat_khau){
+                    supportFragmentManager.beginTransaction().replace(R.id.layout_main, LienHe_Fragment()).commit()
+                } else if (id == R.id.doi_mat_khau) {
                     resetMenu()
-                    var spanString : SpannableString = SpannableString(p0.title.toString())
-                    spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
+                    var spanString: SpannableString = SpannableString(p0.title.toString())
+                    spanString.setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.item_slected
+                            )
+                        ), 0, spanString.length, 0
+                    )
                     p0.setTitle(spanString)
                     mDrawable!!.closeDrawer(Gravity.LEFT)
-                }
-                else if(id == R.id.dangxuat){
-                    resetMenu()
-                    var spanString : SpannableString = SpannableString(p0.title.toString())
-                    spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
-                    p0.setTitle(spanString)
+                } else if (id == R.id.dangxuat) {
+                    /* resetMenu()
+                     var spanString : SpannableString = SpannableString(p0.title.toString())
+                     spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
+                     p0.setTitle(spanString)*/
+                    showAlertDangXuat()
                     mDrawable!!.closeDrawer(Gravity.LEFT)
-                }
-                else if (id == R.id.yeucau){
+                } else if (id == R.id.yeucau) {
                     resetMenu()
-                    var spanString : SpannableString = SpannableString(p0.title.toString())
-                    spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.item_slected)), 0, spanString.length, 0)
+                    var spanString: SpannableString = SpannableString(p0.title.toString())
+                    spanString.setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.item_slected
+                            )
+                        ), 0, spanString.length, 0
+                    )
                     p0.setTitle(spanString)
                     mDrawable!!.closeDrawer(Gravity.LEFT)
                     supportFragmentManager.beginTransaction().replace(R.id.layout_main, YeuCau_Fragment()).commit()
@@ -190,27 +273,65 @@ class HomeActivity : AppCompatActivity() {
             }
         })
 
-        information!!.setOnClickListener(object : View.OnClickListener{
+        information!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 mDrawable!!.closeDrawer(Gravity.LEFT)
-                var intent : Intent = Intent(applicationContext, UpdataInformationActivity::class.java)
+                var intent: Intent = Intent(applicationContext, UpdataInformationActivity::class.java)
                 startActivity(intent)
             }
         })
     }
 
-    fun resetMenu(){
-        for (i in 0..optionMenu!!.menu.size()-1) {
+    fun showAlertDangXuat() {
+        var alert = AlertDialog.Builder(this@HomeActivity)
+            .setTitle("Đăng xuất")
+            .setMessage(
+                "Bạn có muốn đăng xuất không ?"
+            )
+            .setIcon(
+                resources.getDrawable(
+                    android.R.drawable.ic_dialog_alert
+                )
+            )
+            .setPositiveButton(
+                "Ok"
+            ) { dialog, which ->
+                //Do Something Here
+                logout()
+            }
+            .setNegativeButton(
+                "Cancel",
+                object : DialogInterface.OnClickListener {
+
+                    override fun onClick(
+                        dialog: DialogInterface,
+                        which: Int
+                    ) {
+                    }
+                }).show()
+    }
+
+    fun logout() {
+        sharedpreference!!.edit().putString("token", "").apply();
+        finish()
+    }
+
+    fun resetMenu() {
+        for (i in 0..optionMenu!!.menu.size() - 1) {
             var p0 = optionMenu!!.menu.getItem(i)
-            var spanString : SpannableString = SpannableString(p0.getTitle().toString());
-            spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.none_selected)), 0, spanString.length, 0)
+            var spanString: SpannableString = SpannableString(p0.getTitle().toString());
+            spanString.setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.none_selected)),
+                0,
+                spanString.length,
+                0
+            )
             p0.setTitle(spanString)
         }
     }
 
-
-    fun getInformation(){
-        var gson : Gson = Gson()
+    fun getInformation() {
+        var gson: Gson = Gson()
         var json = sharedpreference!!.getString("Information_User", null)
         Log.d("JSON_INFORMATION", json)
         if (json != null) {
@@ -218,8 +339,8 @@ class HomeActivity : AppCompatActivity() {
             Log.d("INFORMATION", informationUser.username)
             txtTenQuan!!.text = informationUser.name
             txtDiaChiQuan!!.text = informationUser.address
-        }
-        else{
+            Picasso.get().load(getString(R.string.bg_default)).into(avatarQuan)
+        } else {
 
         }
     }

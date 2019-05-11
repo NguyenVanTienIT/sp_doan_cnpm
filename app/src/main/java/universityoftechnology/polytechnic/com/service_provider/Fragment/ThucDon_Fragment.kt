@@ -37,32 +37,36 @@ import universityoftechnology.polytechnic.com.service_provider.adapter.MenuAdapt
 import universityoftechnology.polytechnic.com.service_provider.model.Menu
 
 class ThucDon_Fragment : Fragment() {
-    var btnMenu : ImageButton? = null
-    var btnDoan : RelativeLayout? = null
-    var btnDouong : RelativeLayout? = null
-    var btnAdd : FloatingActionButton? = null
+    var btnMenu: ImageButton? = null
+    var btnDoan: RelativeLayout? = null
+    var btnDouong: RelativeLayout? = null
+    var btnAdd: FloatingActionButton? = null
 
-    var txtDoan : TextView? = null
-    var txtDoUong : TextView? = null
-    var lineDoan : View? = null
-    var lineDouong : View? = null
+    var txtDoan: TextView? = null
+    var txtDoUong: TextView? = null
+    var lineDoan: View? = null
+    var lineDouong: View? = null
 
-    var recyclerView : RecyclerView? = null
-    var menuAdapter : MenuAdapter? = null
-    var listMenu : ArrayList<Menu>? = null
-    var progress : ProgressDialog? = null
-    var isFood : Boolean = true
+    var recyclerView: RecyclerView? = null
+    var menuAdapter: MenuAdapter? = null
+    var listMenu: ArrayList<Menu>? = null
+    var progress: ProgressDialog? = null
+    var isFood: Boolean = true
 
-    var sharedpreference : SharedPreferences? = null
-    var Server : String? = null
+    var sharedpreference: SharedPreferences? = null
+    var Server: String? = null
 
-    companion object{
-        var isChange : Boolean = false
+    companion object {
+        var isChange: Boolean = false
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view : View = inflater.inflate(universityoftechnology.polytechnic.com.service_provider.R.layout.fragment_thucdon, container, false)
+        var view: View = inflater.inflate(
+            universityoftechnology.polytechnic.com.service_provider.R.layout.fragment_thucdon,
+            container,
+            false
+        )
         return view
     }
 
@@ -81,20 +85,20 @@ class ThucDon_Fragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (isChange){
+        if (isChange) {
             getMenu(isFood)
             isChange = false
         }
     }
 
-    fun initView(view : View){
+    fun initView(view: View) {
         btnMenu = view.findViewById(R.id.menu)
         btnDoan = view.findViewById(R.id.doan)
         btnDouong = view.findViewById(R.id.douong)
 
         txtDoan = view.findViewById(R.id.text_doan)
         txtDoUong = view.findViewById(R.id.text_douong)
-        lineDoan =view.findViewById(R.id.line_doan)
+        lineDoan = view.findViewById(R.id.line_doan)
         lineDouong = view.findViewById(R.id.line_douong)
         recyclerView = view.findViewById(R.id.list_doan_douong)
         btnAdd = view.findViewById(R.id.btn_add)
@@ -107,24 +111,24 @@ class ThucDon_Fragment : Fragment() {
         recyclerView!!.adapter = menuAdapter
     }
 
-    fun addAction(){
-        btnAdd!!.setOnClickListener(object : View.OnClickListener{
+    fun addAction() {
+        btnAdd!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 //Toast.makeText(activity, "Xin chào", Toast.LENGTH_SHORT).show()
-                var intent : Intent = Intent(activity, AddMenuActivity::class.java)
+                var intent: Intent = Intent(activity, AddMenuActivity::class.java)
                 intent.putExtra("isFood", isFood)
                 startActivity(intent)
             }
         })
 
-        btnMenu!!.setOnClickListener(object : View.OnClickListener{
+        btnMenu!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                var acti : HomeActivity = activity as HomeActivity
+                var acti: HomeActivity = activity as HomeActivity
                 acti!!.mDrawable!!.openDrawer(Gravity.LEFT)
             }
         })
 
-        btnDoan!!.setOnClickListener(object : View.OnClickListener{
+        btnDoan!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 txtDoan!!.setTextColor(resources.getColor(R.color.btn_selected))
                 lineDoan!!.setBackgroundColor(resources.getColor(R.color.btn_selected))
@@ -136,7 +140,7 @@ class ThucDon_Fragment : Fragment() {
             }
         })
 
-        btnDouong!!.setOnClickListener(object : View.OnClickListener{
+        btnDouong!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 txtDoUong!!.setTextColor(resources.getColor(R.color.btn_selected))
                 lineDouong!!.setBackgroundColor(resources.getColor(R.color.btn_selected))
@@ -149,13 +153,13 @@ class ThucDon_Fragment : Fragment() {
         })
     }
 
-    fun getMenu(status : Boolean){
+    fun getMenu(status: Boolean) {
         progress!!.setMessage("Waiting...")
         progress!!.show()
         var token = sharedpreference!!.getString("token", null)
         var url: String = Server + "/provider/menu"
         var requestQueue: RequestQueue = Volley.newRequestQueue(activity)
-        var stringRequest : StringRequest = object : StringRequest(
+        var stringRequest: StringRequest = object : StringRequest(
             Request.Method.GET, url,
             Response.Listener { s ->
                 //var jobj = JSONObject(s)
@@ -168,9 +172,9 @@ class ThucDon_Fragment : Fragment() {
             },
             Response.ErrorListener { e ->
                 Log.d("Request_Ship", e.toString())
-            }){
+            }) {
             override fun getHeaders(): MutableMap<String, String> {
-                var headers : HashMap<String, String> = HashMap<String, String>()
+                var headers: HashMap<String, String> = HashMap<String, String>()
                 headers.put("Authorization", token)
                 return headers
             }
@@ -178,11 +182,11 @@ class ThucDon_Fragment : Fragment() {
         requestQueue.add(stringRequest)
     }
 
-    fun initDataMenu(data : JSONArray, isFood : Boolean){
+    fun initDataMenu(data: JSONArray, isFood: Boolean) {
         deleteAllList()
-        for (i in 0..data.length() - 1){
-            var menuFood : Menu = Menu()
-            var jsonMenu : JSONObject = JSONObject(data[i].toString())
+        for (i in 0..data.length() - 1) {
+            var menuFood: Menu = Menu()
+            var jsonMenu: JSONObject = JSONObject(data[i].toString())
             menuFood._id = jsonMenu.getString("_id")
             menuFood.name = jsonMenu.getString("name")
             menuFood.price = jsonMenu.getInt("price")
@@ -197,12 +201,12 @@ class ThucDon_Fragment : Fragment() {
 
             menuFood.jsonMenu = data[i].toString()
 
-            if (isFood){
-                if (menuFood.isFood!!){
+            if (isFood) {
+                if (menuFood.isFood!!) {
                     listMenu!!.add(menuFood)
                 }
-            }else{
-                if (!menuFood.isFood!!){
+            } else {
+                if (!menuFood.isFood!!) {
                     listMenu!!.add(menuFood)
                 }
             }
@@ -211,8 +215,8 @@ class ThucDon_Fragment : Fragment() {
         menuAdapter!!.notifyDataSetChanged()
     }
 
-    fun deleteAllList(){
-        while (listMenu != null && listMenu!!.size > 0){
+    fun deleteAllList() {
+        while (listMenu != null && listMenu!!.size > 0) {
             listMenu!!.removeAt(0)
         }
     }

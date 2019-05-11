@@ -3,6 +3,7 @@
     <string name="service">https://do-an-cnpm.herokuapp.com</string>
     <string name="default_notification_channel_id"></string>
     <string name="server_image">https://s3-ap-southeast-1.amazonaws.com/doancnpm/public/image</string>
+    <string name="bg_default">https://s3-ap-southeast-1.amazonaws.com/doancnpm/public/image/bg/5c72696c55c8fc07a784ae65_gonjoy_sushitasty_combo.jpg</string>
     <string-array name="optionl_user">
         <item>Nhân Viên</item>
         <item>Chủ Quán</item>

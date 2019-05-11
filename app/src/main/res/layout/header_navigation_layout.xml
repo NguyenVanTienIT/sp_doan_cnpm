@@ -4,8 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="200sp"
     android:id="@+id/information_restaurant"
-    android:background="@drawable/avatar_view"
     >
+
+    <ImageView
+            android:id="@+id/avatar"
+            android:src="@drawable/avatar_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     <TextView
             android:id="@+id/ten_quan"
             android:layout_width="wrap_content"

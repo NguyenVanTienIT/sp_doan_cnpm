@@ -15,16 +15,17 @@ import universityoftechnology.polytechnic.com.service_provider.Activity.Informat
 import universityoftechnology.polytechnic.com.service_provider.R
 import universityoftechnology.polytechnic.com.service_provider.model.Menu
 
-class MenuAdapter(con : Context, list : ArrayList<Menu>) : RecyclerView.Adapter<MenuAdapter.MenuViewHoder>() {
-    var listMenu : ArrayList<Menu>? = null
-    var context : Context? = null
+class MenuAdapter(con: Context, list: ArrayList<Menu>) : RecyclerView.Adapter<MenuAdapter.MenuViewHoder>() {
+    var listMenu: ArrayList<Menu>? = null
+    var context: Context? = null
 
     init {
         context = con
         listMenu = list
     }
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MenuViewHoder {
-        var view : View =LayoutInflater.from(context).inflate(R.layout.item_doan_douong, p0, false)
+        var view: View = LayoutInflater.from(context).inflate(R.layout.item_doan_douong, p0, false)
         return MenuViewHoder(view)
     }
 
@@ -33,12 +34,12 @@ class MenuAdapter(con : Context, list : ArrayList<Menu>) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(p0: MenuViewHoder, p1: Int) {
-        var menuFood : Menu = listMenu!!.get(p1)
+        var menuFood: Menu = listMenu!!.get(p1)
         p0.bind(menuFood)
 
-        p0.itemMain!!.setOnClickListener(object : View.OnClickListener{
+        p0.itemMain!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                var intent : Intent = Intent(context, InformationMenuActivity::class.java)
+                var intent: Intent = Intent(context, InformationMenuActivity::class.java)
                 intent.putExtra("Name", menuFood.name)
                 intent.putExtra("Descreption", menuFood.description)
                 intent.putExtra("Price", menuFood.price)
@@ -50,11 +51,11 @@ class MenuAdapter(con : Context, list : ArrayList<Menu>) : RecyclerView.Adapter<
     }
 
 
-    inner class MenuViewHoder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        var avatar : ImageView? = null
-        var name : TextView? = null
-        var price : TextView? = null
-        var itemMain : LinearLayout? = null
+    inner class MenuViewHoder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var avatar: ImageView? = null
+        var name: TextView? = null
+        var price: TextView? = null
+        var itemMain: LinearLayout? = null
 
         init {
             avatar = itemView.findViewById(R.id.iamge_do_an_do_uong)
@@ -64,10 +65,11 @@ class MenuAdapter(con : Context, list : ArrayList<Menu>) : RecyclerView.Adapter<
         }
 
 
-        fun bind(menu : Menu){
+        fun bind(menu: Menu) {
             name!!.setText(menu.name.toString())
-            price!!.setText(menu.price.toString()+" đ")
-            Picasso.get().load(context!!.resources.getString(R.string.server_image)+"/menu/"+menu.thumbnail).into(avatar)
+            price!!.setText(menu.price.toString() + " đ")
+            Picasso.get().load(context!!.resources.getString(R.string.server_image) + "/menu/" + menu.thumbnail)
+                .into(avatar)
         }
 
     }

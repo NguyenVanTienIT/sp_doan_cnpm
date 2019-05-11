@@ -24,17 +24,15 @@ import android.support.v4.app.TaskStackBuilder
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
 
-    var optionalUser : Spinner? = null
-    var editTextMaNhaHang : EditText? = null
-    var textRegister : TextView? = null
-    var editUserName : EditText? = null
-    var editPassword : EditText? = null
-    var btnLogin : Button? = null
-    var dialog : android.app.AlertDialog? = null
-    var Server : String = ""
-    var sharedpreference : SharedPreferences? = null
-
-
+    var optionalUser: Spinner? = null
+    var editTextMaNhaHang: EditText? = null
+    var textRegister: TextView? = null
+    var editUserName: EditText? = null
+    var editPassword: EditText? = null
+    var btnLogin: Button? = null
+    var dialog: android.app.AlertDialog? = null
+    var Server: String = ""
+    var sharedpreference: SharedPreferences? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,30 +62,29 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         addActionListener()
 
 
-
     }
 
-    fun initView(){
+    fun initView() {
         textRegister = findViewById(R.id.register)
         editUserName = findViewById(R.id.username)
         editPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.login)
 
         sharedpreference = PreferenceManager.getDefaultSharedPreferences(applicationContext);
-        if (sharedpreference!!.getString("token", null) != null) {
-                var intent: Intent = Intent(applicationContext, HomeActivity::class.java)
-                startActivity(intent)
+        if (sharedpreference!!.getString("token", null) != null && sharedpreference!!.getString("token", null) != "") {
+            var intent: Intent = Intent(applicationContext, HomeActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    fun addActionListener(){
-        textRegister!!.setOnClickListener(object : View.OnClickListener{
+    fun addActionListener() {
+        textRegister!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                var intent : Intent = Intent(applicationContext, RegisterActivity::class.java)
+                var intent: Intent = Intent(applicationContext, RegisterActivity::class.java)
                 startActivity(intent)
             }
         })
-        btnLogin!!.setOnClickListener(object : View.OnClickListener{
+        btnLogin!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 LoginUser(editUserName!!.text.toString(), editPassword!!.text.toString())
             }
@@ -101,15 +98,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (position == 0){
+        if (position == 0) {
             editTextMaNhaHang!!.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             editTextMaNhaHang!!.visibility = View.GONE
         }
     }
 
-    fun LoginUser(userName : String, password : String){
+    override fun onBackPressed() {
+        return
+    }
+
+    fun LoginUser(userName: String, password: String) {
         dialog = SpotsDialog.Builder().setContext(this@MainActivity)
             .setMessage("Login...")
             .build()
@@ -117,35 +117,35 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         dialog!!.show()
         var url: String = Server + "/auth/login-provider"
         var requestQueue: RequestQueue = Volley.newRequestQueue(this)
-        var stringRequest : StringRequest = object : StringRequest(
+        var stringRequest: StringRequest = object : StringRequest(
             Request.Method.POST, url,
             Response.Listener { s ->
                 try {
                     var jobj = JSONObject(s)
                     var user: String? = jobj.getString("username")
-                    if (user != null){ // Login thành công
-                        if(dialog != null) dialog!!.dismiss()
+                    if (user != null) { // Login thành công
+                        if (dialog != null) dialog!!.dismiss()
                         Toast.makeText(applicationContext, "Đăng nhập tài khoản thành công", Toast.LENGTH_SHORT).show()
-                        var intent : Intent = Intent(applicationContext, HomeActivity::class.java)
-                        sharedpreference!!.edit().putString("token",jobj.getString("accessToken")).apply();
+                        var intent: Intent = Intent(applicationContext, HomeActivity::class.java)
+                        sharedpreference!!.edit().putString("token", jobj.getString("accessToken")).apply();
                         sharedpreference!!.edit().putString("Information_User", jobj.toString()).apply()
                         startActivity(intent)
-                    }else{
-                        if(dialog != null) dialog!!.dismiss()
+                    } else {
+                        if (dialog != null) dialog!!.dismiss()
                         Toast.makeText(applicationContext, "Đăng nhập tài khoản thất bại", Toast.LENGTH_SHORT).show()
                     }
-                }catch (e : Exception){
-                    if(dialog != null) dialog!!.dismiss()
+                } catch (e: Exception) {
+                    if (dialog != null) dialog!!.dismiss()
                     Toast.makeText(applicationContext, "Đăng nhập tài khoản thất bại", Toast.LENGTH_SHORT).show()
                     Log.d("Error", e.toString())
                 }
             },
             Response.ErrorListener { e ->
-                if(dialog != null) dialog!!.dismiss()
+                if (dialog != null) dialog!!.dismiss()
                 Toast.makeText(applicationContext, "Đăng nhập tài khoản thất bại", Toast.LENGTH_SHORT).show()
-            }){
+            }) {
             override fun getParams(): Map<String, String> {
-                var params : HashMap<String, String> = HashMap<String, String>()
+                var params: HashMap<String, String> = HashMap<String, String>()
                 params.put("username", userName)
                 params.put("password", password)
                 return params
